@@ -300,7 +300,7 @@ class Synapse {
                 const inputs = target.elements;
                 const url = inputs.namedItem("url").value;
                 const method = inputs.namedItem("method").value;
-                const response = await fetch("http://localhost:3000/proxy", {
+                const response = await fetch("https://synapse-ivory-three.vercel.app/proxy", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"

@@ -34,7 +34,7 @@ export default class Synapse {
                 const url = (inputs.namedItem("url") as HTMLInputElement).value
                 const method = (inputs.namedItem("method") as HTMLInputElement).value
 
-                const response = await fetch("http://localhost:3000/proxy", {
+                const response = await fetch("https://synapse-ivory-three.vercel.app/proxy", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
