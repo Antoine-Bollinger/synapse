@@ -1,0 +1,41 @@
+@use "./variables";
+
+.popup {
+    position: fixed;
+    display: none;
+    min-width: 200px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #4F5B93;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 2px grey;
+    pointer-events: none;
+
+    &:before {
+        content: "";
+        position: absolute;
+        transform: rotate(45deg);
+        background-color: #4F5B93;
+        left: 50%;
+    }
+
+    .popup-body {
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            height: variables.$line-height;
+            line-height: variables.$line-height;
+            font-size: variables.$line-height;
+        }
+
+        i {
+            height: variables.$line-height;
+            width: variables.$line-height;
+        }
+    }
+
+}

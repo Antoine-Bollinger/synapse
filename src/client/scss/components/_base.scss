@@ -1,0 +1,69 @@
+@use "./variables";
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', Courier, monospace;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: hidden;
+}
+
+body {
+    margin: auto;
+    padding: 1% 5%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+h1,
+a {
+    color: variables.$primary;
+    text-align: center;
+}
+
+a {
+    color: variables.$primary;
+    font-weight: bold;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+section {
+    width: 100%;
+    flex-grow: 1;
+    overflow-y: hidden;
+}
+
+aside,
+article {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    border: variables.$primary thin solid;
+    border-radius: 5px;
+    padding: 1%;
+    word-wrap: break-word;
+    font-size: 0.8em;
+}
+
+.status {
+    height: 25px;
+    display: flex;
+
+    >p {
+        font-weight: bold;
+        line-height: 25px;
+    }
+}

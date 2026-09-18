@@ -1,0 +1,23 @@
+# local env files
+.env
+.env.local
+.env.*.local
+.env.php
+bricolo
+
+# vendors & node_modules
+node_modules
+vendor
+composer.lock
+package-lock.json
+
+# deploy
+deploy*.php
+redirect.php
+
+# VSCode 
+.vscode
+
+# Old
+*_old.*
+*_old/

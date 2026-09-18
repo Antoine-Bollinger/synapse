@@ -1,0 +1,22 @@
+@use "./variables";
+
+.tabs {
+    display: flex;
+    height: 25px;
+    gap: 10px;
+    list-style: none;
+    border-bottom: thin solid variables.$primary;
+
+    .tab {
+        cursor: pointer;
+        height: 100%;
+        line-height: 25px;
+        padding: 0 10px;
+        transition: all 0.2s;
+
+        &.active {
+            font-weight: bold;
+            border-bottom: 2px solid variables.$primary;
+        }
+    }
+}
