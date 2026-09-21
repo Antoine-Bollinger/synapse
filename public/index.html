@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#4F5B93">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="icon" type="image/png" href="favicon.ico" />
+    <title>Synapse by partez</title>
+    <script defer src="https://kit.fontawesome.com/63124842e5.js" crossorigin="anonymous"></script>
+    <script defer src="./js/bundle.js" type="module"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome to partez's Synapse!</h1>
+    </header>
+    <section class="flex_columns">
+        <aside class="flex_column flex_grow_1">
+            <form>
+                <div class="flex">
+                    <div class="flex_grow_1 group_input">
+                        <select name="method">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="PATCH">PATCH</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+                        <input type="url" name="url" class="flex_grow_1" />
+                        <button type="submit">SEND</button>
+                    </div>
+                </div>
+            </form>
+        </aside>
+        <article class="flex_column flex_grow_1">
+            <div class="status">
+                <p>Status: <span id="status"></span></p>
+            </div>
+            <div>
+                <ul class="tabs">
+                    <li class="tab active" data-for="response">Response</li>
+                    <li class="tab" data-for="headers">Headers</li>
+                </ul>
+            </div>
+            <div id="response" class="content flex_grow_1 scroll"></div>
+            <div id="headers" class="content flex_grow_1 scroll" style="display:none;"></div>
+            <div id="loader" class="loader">
+                <div></div>
+            </div>
+        </article>
+    </section>
+    <footer class="flex_center">
+        <div>
+            Coded with 💚 by <a href="mailto:abollinger@partez.net">Antoine Bollinger</a>&nbsp;|&nbsp;
+            <a href="https://github.com/Antoine-Bollinger/qrcode"><i class="fa-brands fa-github"></i></a>&nbsp;|&nbsp;
+            <a href="https://www.linkedin.com/in/antoinebollinger/"><i
+                    class="fa-brands fa-linkedin"></i></a>&nbsp;|&nbsp;
+            <a href="https://partez.net">partez.net</a>
+        </div>
+    </footer>
+    <div class="popup">
+        <div class="popup-body">
+            <p class="popup-content"></p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,2 @@
+export const TIMEOUT_SEC = 60
+export const API_URL = "http://localhost:3000/proxy"

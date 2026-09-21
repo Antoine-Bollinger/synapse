@@ -1,0 +1,83 @@
+@use "./variables";
+
+.json-root,
+.json-children {
+    list-style-type: none;
+    margin: 0;
+}
+
+.json-node {
+    .json-placeholder {
+        display: none;
+    }
+
+    &.children-collapsed {
+        display: flex;
+        align-items: center;
+
+        .json-placeholder {
+            display: block;
+        }
+    }
+}
+
+.json-children {
+    padding-left: 14px;
+}
+
+.json-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 0;
+
+    >* {
+        height: variables.$line-height;
+    }
+
+    &:has(.json-toggle:hover) {
+        +.json-children {
+            opacity: 0.3;
+        }
+
+        ~.json-placeholder {
+            opacity: 1;
+        }
+    }
+}
+
+.json-toggle {
+    width: variables.$line-height;
+    height: variables.$line-height;
+    user-select: none;
+    cursor: pointer;
+    color: #4F5B93;
+
+}
+
+.json-label {
+    color: #4F5B93;
+    font-weight: bold;
+}
+
+.json-value {
+    padding: 2px 0;
+}
+
+.json-children {
+    margin-left: 16px;
+    border-left: 1px solid #ddd;
+    padding-left: 12px;
+}
+
+.json-placeholder {
+    opacity: 0.3;
+}
+
+.collapsed {
+    display: none;
+}
+
+.context {
+    cursor: pointer;
+}
