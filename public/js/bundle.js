@@ -26,8 +26,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TIMEOUT_SEC: () => (/* binding */ TIMEOUT_SEC)
 /* harmony export */ });
 const TIMEOUT_SEC = 60;
-const API_URL = "https://synapse-rouge-two.vercel.app/proxy";
-// export const API_URL = "http://localhost:3000/proxy"
+// export const API_URL = "https://synapse-rouge-two.vercel.app/proxy"
+const API_URL = "http://localhost:3000/proxy";
 
 
 /***/ },
@@ -192,6 +192,37 @@ class JSONParser {
 
 /***/ },
 
+/***/ "./src/client/ts/components/list.ts"
+/*!******************************************!*\
+  !*** ./src/client/ts/components/list.ts ***!
+  \******************************************/
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ List)
+/* harmony export */ });
+class List {
+    addRows;
+    constructor() {
+        this.addRows = document.querySelectorAll(".add_row");
+        this.eventListeners();
+    }
+    eventListeners() {
+        this.addRows.forEach((addRow) => {
+            addRow.addEventListener("click", (event) => {
+                event.preventDefault();
+                const templateId = addRow.dataset.template;
+                const template = document.getElementById(templateId)?.innerHTML;
+                addRow.insertAdjacentHTML("beforebegin", template || "");
+            });
+        });
+    }
+}
+
+
+/***/ },
+
 /***/ "./src/client/ts/components/loader.ts"
 /*!********************************************!*\
   !*** ./src/client/ts/components/loader.ts ***!
@@ -330,6 +361,7 @@ class Synapse {
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 });
+                console.log(body);
                 const response = await fetch(_config__WEBPACK_IMPORTED_MODULE_0__.API_URL, {
                     method: "POST",
                     headers: {
@@ -338,6 +370,7 @@ class Synapse {
                     body
                 });
                 const result = await response.json();
+                console.log(result);
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers));
                 const responseHtml = this.jsonParser.parse(result.body);
                 this.headers.innerHTML = headersHtml;
@@ -504,14 +537,17 @@ let __webpack_exports__ = {};
   \*******************************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../scss/main.scss */ "./src/client/scss/main.scss");
-/* harmony import */ var _components_synapse__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/synapse */ "./src/client/ts/components/synapse.ts");
-/* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/tabs */ "./src/client/ts/components/tabs.ts");
+/* harmony import */ var _components_list__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/list */ "./src/client/ts/components/list.ts");
+/* harmony import */ var _components_synapse__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/synapse */ "./src/client/ts/components/synapse.ts");
+/* harmony import */ var _components_tabs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/tabs */ "./src/client/ts/components/tabs.ts");
+
 
 
 
 window.onload = () => {
-    new _components_synapse__WEBPACK_IMPORTED_MODULE_1__["default"]();
-    new _components_tabs__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    new _components_tabs__WEBPACK_IMPORTED_MODULE_3__["default"]();
+    new _components_list__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    new _components_synapse__WEBPACK_IMPORTED_MODULE_2__["default"]();
 };
 
 })();

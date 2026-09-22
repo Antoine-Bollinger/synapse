@@ -166,6 +166,10 @@ article {
     transform: rotate(1turn);
   }
 }
+.add_row {
+  height: 26px;
+}
+
 select,
 button,
 input {
@@ -190,7 +194,7 @@ select {
 .group_input {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: initial;
 }
 .group_input *:first-child {
   border-radius: 4px 0 0 4px;

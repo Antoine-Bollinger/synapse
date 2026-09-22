@@ -42,19 +42,23 @@
                 </ul>
             </div>
             <div id="query" class="content" data-target="query">
-                <form name="query">
+                <form name="query" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="parameter" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
+                    <div class="add_row" data-template="queryTemplate"><i class="fa-solid fa-circle-plus"></i>&nbsp;Add
+                        row</div>
                 </form>
             </div>
             <div id="headers" class="content" data-target="query" style="display:none;">
-                <form name="headers">
+                <form name="headers" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="header" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
+                    <div class="add_row" data-template="headersTemplate"><i
+                            class="fa-solid fa-circle-plus"></i>&nbsp;Add row</div>
                 </form>
             </div>
             <div id="auth" class="content" data-target="query" style="display:none;">
@@ -68,11 +72,13 @@
                 </form>
             </div>
             <div id="body" class="content" data-target="query" style="display:none;">
-                <form name="body">
+                <form name="body" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="name" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
+                    <div class="add_row" data-template="bodyTemplate"><i class="fa-solid fa-circle-plus"></i>&nbsp;Add
+                        row</div>
                 </form>
             </div>
         </aside>
@@ -108,5 +114,26 @@
         </div>
     </div>
 </body>
+
+<template id="queryTemplate">
+    <div class="w-100 group_input">
+        <input class="inputName" type="text" placeholder="parameter" />
+        <input class="inputValue" type="text" placeholder="value" />
+    </div>
+</template>
+
+<template id="headersTemplate">
+    <div class="w-100 group_input">
+        <input class="inputName" type="text" placeholder="header" />
+        <input class="inputValue" type="text" placeholder="value" />
+    </div>
+</template>
+
+<template id="bodyTemplate">
+    <div class="w-100 group_input">
+        <input class="inputName" type="text" placeholder="name" />
+        <input class="inputValue" type="text" placeholder="value" />
+    </div>
+</template>
 
 </html>

@@ -53,6 +53,8 @@ export default class Synapse {
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 })
 
+                console.log(body)
+
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
@@ -62,6 +64,8 @@ export default class Synapse {
                 });
 
                 const result = await response.json()
+
+                console.log(result)
 
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers))
                 const responseHtml = this.jsonParser.parse(result.body)
