@@ -53,8 +53,6 @@ export default class Synapse {
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 })
 
-                console.log(body)
-
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {

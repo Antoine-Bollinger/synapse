@@ -330,7 +330,6 @@ class Synapse {
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 });
-                console.log(body);
                 const response = await fetch(_config__WEBPACK_IMPORTED_MODULE_0__.API_URL, {
                     method: "POST",
                     headers: {
