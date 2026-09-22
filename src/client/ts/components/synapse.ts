@@ -1,3 +1,4 @@
+import { HeadersType } from "../../types/headers"
 import { API_URL } from "./config"
 import { isJsonString } from "./helpers"
 import JSONParser from "./jsonparser"
@@ -36,9 +37,11 @@ export default class Synapse {
                 const url = (inputs.namedItem("url") as HTMLInputElement).value
                 const method = (inputs.namedItem("method") as HTMLInputElement).value
 
-                const headers = {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Authorization": this.setAuth()
+                let headers: HeadersType = this.setHeaders()
+
+                const auth = this.setAuth()
+                if (auth !== "") {
+                    headers["Authorization"] = auth
                 }
 
                 const data = this.setBodyData()
@@ -49,6 +52,7 @@ export default class Synapse {
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 })
+
                 console.log(body)
 
                 const response = await fetch(API_URL, {
@@ -60,6 +64,7 @@ export default class Synapse {
                 });
 
                 const result = await response.json()
+
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers))
                 const responseHtml = this.jsonParser.parse(result.body)
                 this.headers.innerHTML = headersHtml
@@ -83,7 +88,7 @@ export default class Synapse {
         const bodyParameters = bodyForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
         let data: string = ""
         bodyParameters.forEach((bodyParameter, index) => {
-            const parameter = (bodyParameter.querySelector(`.inputParameter`) as HTMLInputElement)?.value
+            const parameter = (bodyParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
             const value = (bodyParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
             data += `${index > 0 ? "&" : ""}${parameter}=${value}`
         })
@@ -93,10 +98,23 @@ export default class Synapse {
     setAuth(): string {
         const authForm = document.forms.namedItem("auth")
         const authParameters = authForm?.querySelector(".group_input") as HTMLElement
-        const parameter = (authParameters.querySelector(`.inputParameter`) as HTMLSelectElement)?.value
+        const parameter = (authParameters.querySelector(`.inputName`) as HTMLSelectElement)?.value
         const value = (authParameters.querySelector(`.inputValue`) as HTMLInputElement)?.value
         const auth = `${parameter} ${value}`
         return auth
+    }
+
+    setHeaders(): HeadersType {
+        const headersForm = document.forms.namedItem("headers")
+        const headersParameters = headersForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+        let headers: HeadersType = {}
+        headersParameters.forEach(headersParameter => {
+            const header = (headersParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
+            const value = (headersParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
+            if (header !== "" && value !== "")
+                headers[header] = value
+        })
+        return headers
     }
 
     resetResponse() {

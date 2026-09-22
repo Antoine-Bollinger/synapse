@@ -16,6 +16,7 @@ app.use((req, res, next) => {
 app.post("/proxy", async (req, res) => {
     const { url, method, headers, data } = req.body
 
+    console.log(data)
     const response = await fetch(url, {
         method,
         headers,
@@ -24,6 +25,7 @@ app.post("/proxy", async (req, res) => {
 
     const text = await response.text()
 
+    console.log(text)
     res.json({
         status: response.status,
         headers: Object.fromEntries(response.headers.entries()),

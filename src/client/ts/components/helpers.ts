@@ -62,10 +62,6 @@ export const jsonToHtmlList = (data: any, label?: string): string => {
     `
 }
 
-// Source - https://stackoverflow.com/a/3710226
-// Posted by Gumbo, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-09-18, License - CC BY-SA 4.0
-
 export const isJsonString = (text: string): boolean => {
     try {
         JSON.parse(text);

@@ -26,8 +26,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TIMEOUT_SEC: () => (/* binding */ TIMEOUT_SEC)
 /* harmony export */ });
 const TIMEOUT_SEC = 60;
-// export const API_URL = "https://synapse-rouge-two.vercel.app/proxy"
-const API_URL = "http://localhost:3000/proxy";
+const API_URL = "https://synapse-rouge-two.vercel.app/proxy";
+// export const API_URL = "http://localhost:3000/proxy"
 
 
 /***/ },
@@ -102,9 +102,6 @@ const jsonToHtmlList = (data, label) => {
         </li>
     `;
 };
-// Source - https://stackoverflow.com/a/3710226
-// Posted by Gumbo, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-09-18, License - CC BY-SA 4.0
 const isJsonString = (text) => {
     try {
         JSON.parse(text);
@@ -321,10 +318,11 @@ class Synapse {
                 const inputs = mainForm.elements;
                 const url = inputs.namedItem("url").value;
                 const method = inputs.namedItem("method").value;
-                const headers = {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "Authorization": this.setAuth()
-                };
+                let headers = this.setHeaders();
+                const auth = this.setAuth();
+                if (auth !== "") {
+                    headers["Authorization"] = auth;
+                }
                 const data = this.setBodyData();
                 const body = JSON.stringify({
                     method: method,
@@ -364,7 +362,7 @@ class Synapse {
         const bodyParameters = bodyForm?.querySelectorAll(".group_input");
         let data = "";
         bodyParameters.forEach((bodyParameter, index) => {
-            const parameter = bodyParameter.querySelector(`.inputParameter`)?.value;
+            const parameter = bodyParameter.querySelector(`.inputName`)?.value;
             const value = bodyParameter.querySelector(`.inputValue`)?.value;
             data += `${index > 0 ? "&" : ""}${parameter}=${value}`;
         });
@@ -373,10 +371,22 @@ class Synapse {
     setAuth() {
         const authForm = document.forms.namedItem("auth");
         const authParameters = authForm?.querySelector(".group_input");
-        const parameter = authParameters.querySelector(`.inputParameter`)?.value;
+        const parameter = authParameters.querySelector(`.inputName`)?.value;
         const value = authParameters.querySelector(`.inputValue`)?.value;
         const auth = `${parameter} ${value}`;
         return auth;
+    }
+    setHeaders() {
+        const headersForm = document.forms.namedItem("headers");
+        const headersParameters = headersForm?.querySelectorAll(".group_input");
+        let headers = {};
+        headersParameters.forEach(headersParameter => {
+            const header = headersParameter.querySelector(`.inputName`)?.value;
+            const value = headersParameter.querySelector(`.inputValue`)?.value;
+            if (header !== "" && value !== "")
+                headers[header] = value;
+        });
+        return headers;
     }
     resetResponse() {
         this.response.innerText = "";
@@ -411,14 +421,12 @@ class Tabs {
     // contents: NodeListOf<HTMLElement>
     constructor() {
         this.tabContainers = document.querySelectorAll(".tabs");
-        // this.contents = document.querySelectorAll(".content")
         this.eventListeners();
     }
     eventListeners() {
         this.tabContainers?.forEach(tabContainer => {
             const tabs = tabContainer.querySelectorAll(".tab");
             const contents = document.querySelectorAll(`.content[data-target="${tabContainer.dataset.target}"]`);
-            console.log(contents);
             tabs.forEach(tab => {
                 tab.addEventListener("click", _ => {
                     contents.forEach(content => content.style.display = "none");

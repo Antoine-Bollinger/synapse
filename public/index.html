@@ -41,7 +41,7 @@
                     <li class="tab" data-for="body">Body</li>
                 </ul>
             </div>
-            <div id="query" class="content flex_grow_1 scroll" data-target="query">
+            <div id="query" class="content" data-target="query">
                 <form name="query">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="parameter" />
@@ -49,21 +49,28 @@
                     </div>
                 </form>
             </div>
-            <div id="headers" class="content flex_grow_1 scroll" data-target="query" style="display:none;"></div>
-            <div id="auth" class="content flex_grow_1 scroll" data-target="query" style="display:none;">
+            <div id="headers" class="content" data-target="query" style="display:none;">
+                <form name="headers">
+                    <div class="w-100 group_input">
+                        <input class="inputName" type="text" placeholder="header" />
+                        <input class="inputValue" type="text" placeholder="value" />
+                    </div>
+                </form>
+            </div>
+            <div id="auth" class="content" data-target="query" style="display:none;">
                 <form name="auth">
                     <div class="w-100 group_input">
-                        <select class="inputParameter" type="text" placeholder="parameter">
+                        <select class="inputName">
                             <option value="Bearer">Bearer</option>
                         </select>
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
                 </form>
             </div>
-            <div id="body" class="content flex_grow_1 scroll" data-target="query" style="display:none;">
+            <div id="body" class="content" data-target="query" style="display:none;">
                 <form name="body">
                     <div class="w-100 group_input">
-                        <input class="inputParameter" type="text" placeholder="parameter" />
+                        <input class="inputName" type="text" placeholder="name" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
                 </form>
