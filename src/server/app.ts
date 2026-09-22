@@ -1,6 +1,6 @@
 import express from "express"
-import ServerlessHttp
-    from "serverless-http"
+import ServerlessHttp from "serverless-http"
+
 const app = express()
 
 app.use(express.json())

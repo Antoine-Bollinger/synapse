@@ -32,7 +32,7 @@
     padding: 2px 0;
 
     >* {
-        height: variables.$line-height;
+        height: variables.$second-height;
     }
 
     &:has(.json-toggle:hover) {
@@ -47,8 +47,8 @@
 }
 
 .json-toggle {
-    width: variables.$line-height;
-    height: variables.$line-height;
+    width: variables.$second-height;
+    height: variables.$second-height;
     user-select: none;
     cursor: pointer;
     color: #4F5B93;

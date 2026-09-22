@@ -19,7 +19,7 @@ body {
     margin: auto;
     padding: 1% 5%;
     display: flex;
-    gap: 10px;
+    gap: variables.$gap;
     flex-direction: column;
 }
 
@@ -37,7 +37,7 @@ a {
 header {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 section {
@@ -59,11 +59,11 @@ article {
 }
 
 .status {
-    height: 25px;
+    height: variables.$main-height;
     display: flex;
 
     >p {
         font-weight: bold;
-        line-height: 25px;
+        line-height: variables.$main-height;
     }
 }

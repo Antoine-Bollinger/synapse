@@ -26,6 +26,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TIMEOUT_SEC: () => (/* binding */ TIMEOUT_SEC)
 /* harmony export */ });
 const TIMEOUT_SEC = 60;
+// export const API_URL = "https://synapse-rouge-two.vercel.app/proxy"
 const API_URL = "http://localhost:3000/proxy";
 
 
@@ -303,7 +304,7 @@ class Synapse {
         this.jsonParser = new _jsonparser__WEBPACK_IMPORTED_MODULE_2__["default"]();
         this.mainForm = document.forms[0];
         this.response = document.getElementById("response");
-        this.headers = document.getElementById("headers");
+        this.headers = document.querySelector("article #headers");
         this.status = document.getElementById("status");
         this.loader = new _loader__WEBPACK_IMPORTED_MODULE_3__["default"]();
         this.formSubmitHandler();
@@ -316,19 +317,28 @@ class Synapse {
                 this.resetHeaders();
                 this.resetResponse();
                 this.resetStatus();
-                const target = event.target;
-                const inputs = target.elements;
+                const mainForm = event.target;
+                const inputs = mainForm.elements;
                 const url = inputs.namedItem("url").value;
                 const method = inputs.namedItem("method").value;
+                const headers = {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "Authorization": this.setAuth()
+                };
+                const data = this.setBodyData();
+                const body = JSON.stringify({
+                    method: method,
+                    url: url,
+                    headers,
+                    data: ["GET", "HEAD"].includes(method) ? null : data
+                });
+                console.log(body);
                 const response = await fetch(_config__WEBPACK_IMPORTED_MODULE_0__.API_URL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        method: method,
-                        url: url
-                    })
+                    body
                 });
                 const result = await response.json();
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers));
@@ -348,6 +358,25 @@ class Synapse {
                 this.loader.hide();
             }
         });
+    }
+    setBodyData() {
+        const bodyForm = document.forms.namedItem("body");
+        const bodyParameters = bodyForm?.querySelectorAll(".group_input");
+        let data = "";
+        bodyParameters.forEach((bodyParameter, index) => {
+            const parameter = bodyParameter.querySelector(`.inputParameter`)?.value;
+            const value = bodyParameter.querySelector(`.inputValue`)?.value;
+            data += `${index > 0 ? "&" : ""}${parameter}=${value}`;
+        });
+        return data;
+    }
+    setAuth() {
+        const authForm = document.forms.namedItem("auth");
+        const authParameters = authForm?.querySelector(".group_input");
+        const parameter = authParameters.querySelector(`.inputParameter`)?.value;
+        const value = authParameters.querySelector(`.inputValue`)?.value;
+        const auth = `${parameter} ${value}`;
+        return auth;
     }
     resetResponse() {
         this.response.innerText = "";
@@ -378,21 +407,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Tabs)
 /* harmony export */ });
 class Tabs {
-    tabs;
-    contents;
+    tabContainers;
+    // contents: NodeListOf<HTMLElement>
     constructor() {
-        this.tabs = document.querySelectorAll(".tab");
-        this.contents = document.querySelectorAll(".content");
+        this.tabContainers = document.querySelectorAll(".tabs");
+        // this.contents = document.querySelectorAll(".content")
         this.eventListeners();
     }
     eventListeners() {
-        this.tabs?.forEach(tab => {
-            tab.addEventListener("click", _ => {
-                this.contents.forEach(content => content.style.display = "none");
-                this.tabs.forEach(tab => tab.classList.remove("active"));
-                const content = [...this.contents].filter(content => content.id === tab.dataset.for)[0];
-                content.style.display = "block";
-                tab.classList.add("active");
+        this.tabContainers?.forEach(tabContainer => {
+            const tabs = tabContainer.querySelectorAll(".tab");
+            const contents = document.querySelectorAll(`.content[data-target="${tabContainer.dataset.target}"]`);
+            console.log(contents);
+            tabs.forEach(tab => {
+                tab.addEventListener("click", _ => {
+                    contents.forEach(content => content.style.display = "none");
+                    tabs.forEach(tab => tab.classList.remove("active"));
+                    const content = [...contents].filter(content => content.id === tab.dataset.for)[0];
+                    content.style.display = "block";
+                    tab.classList.add("active");
+                });
             });
         });
     }

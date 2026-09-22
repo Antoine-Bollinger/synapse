@@ -20,7 +20,7 @@ body {
   margin: auto;
   padding: 1% 5%;
   display: flex;
-  gap: 10px;
+  gap: 16px;
   flex-direction: column;
 }
 
@@ -38,7 +38,7 @@ a {
 header {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 section {
@@ -60,12 +60,12 @@ article {
 }
 
 .status {
-  height: 25px;
+  height: 26px;
   display: flex;
 }
 .status > p {
   font-weight: bold;
-  line-height: 25px;
+  line-height: 26px;
 }
 
 .flex_start {
@@ -73,7 +73,7 @@ article {
   align-items: start;
   justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .flex_center {
@@ -81,7 +81,7 @@ article {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .flex_end {
@@ -89,22 +89,31 @@ article {
   align-items: end;
   justify-content: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .flex_column {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 }
 
 .flex_columns {
   display: flex;
-  gap: 10px;
+  gap: 16px;
 }
 .flex_columns > * {
   flex: 1;
   min-width: 0;
+  width: 100%;
+}
+.flex_columns {
+  flex-direction: column;
+}
+@media screen and (min-width: 900px) {
+  .flex_columns {
+    flex-direction: row;
+  }
 }
 
 .flex_grow_1 {
@@ -115,12 +124,16 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 16px;
 }
 
 .scroll {
   overflow-y: scroll;
   overflow-x: hidden;
+}
+
+.w_100 {
+  width: 100%;
 }
 
 .loader {
@@ -156,9 +169,9 @@ article {
 select,
 button,
 input {
-  height: 25px;
+  height: 26px;
   border-radius: 0;
-  border: thin solid #4F5B93;
+  border: thin solid rgba(79, 91, 147, 0.7);
   padding: 0 10px;
 }
 
@@ -184,6 +197,14 @@ select {
 }
 .group_input *:last-child {
   border-radius: 0 4px 4px 0;
+}
+.group_input:has(> :nth-child(2):last-child) > *, .group_input:has(> :nth-child(3):last-child) > :nth-child(2) {
+  flex-grow: 1;
+}
+
+input:focus-visible {
+  outline: none;
+  border: thin solid #4f5b93;
 }
 
 .json-root,
@@ -214,7 +235,7 @@ select {
   padding: 2px 0;
 }
 .json-header > * {
-  height: 14px;
+  height: 16px;
 }
 .json-header:has(.json-toggle:hover) + .json-children {
   opacity: 0.3;
@@ -224,8 +245,8 @@ select {
 }
 
 .json-toggle {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   user-select: none;
   cursor: pointer;
   color: #4F5B93;
@@ -278,32 +299,32 @@ select {
   left: 50%;
 }
 .popup .popup-body {
-  height: 20px;
+  height: 26px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .popup .popup-body p {
-  height: 14px;
-  line-height: 14px;
-  font-size: 14px;
+  height: 16px;
+  line-height: 16px;
+  font-size: 16px;
 }
 .popup .popup-body i {
-  height: 14px;
-  width: 14px;
+  height: 16px;
+  width: 16px;
 }
 
 .tabs {
   display: flex;
-  height: 25px;
-  gap: 10px;
+  height: 26px;
+  gap: 16px;
   list-style: none;
   border-bottom: thin solid #4F5B93;
 }
 .tabs .tab {
   cursor: pointer;
-  height: 100%;
-  line-height: 25px;
+  height: 26px;
+  line-height: 26px;
   padding: 0 10px;
   transition: all 0.2s;
 }

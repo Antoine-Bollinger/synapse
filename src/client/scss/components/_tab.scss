@@ -2,15 +2,15 @@
 
 .tabs {
     display: flex;
-    height: 25px;
-    gap: 10px;
+    height: variables.$main-height;
+    gap: variables.$gap;
     list-style: none;
     border-bottom: thin solid variables.$primary;
 
     .tab {
         cursor: pointer;
-        height: 100%;
-        line-height: 25px;
+        height: variables.$main-height;
+        line-height: variables.$main-height;
         padding: 0 10px;
         transition: all 0.2s;
 

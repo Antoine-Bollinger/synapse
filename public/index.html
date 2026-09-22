@@ -18,9 +18,9 @@
     </header>
     <section class="flex_columns">
         <aside class="flex_column flex_grow_1">
-            <form>
-                <div class="flex">
-                    <div class="flex_grow_1 group_input">
+            <form class="flex_column w_100">
+                <div class="flex w_100">
+                    <div class="flex_grow_1 w_100 group_input">
                         <select name="method">
                             <option value="GET">GET</option>
                             <option value="POST">POST</option>
@@ -28,24 +28,59 @@
                             <option value="PATCH">PATCH</option>
                             <option value="DELETE">DELETE</option>
                         </select>
-                        <input type="url" name="url" class="flex_grow_1" />
+                        <input type="url" name="url" />
                         <button type="submit">SEND</button>
                     </div>
                 </div>
             </form>
+            <div>
+                <ul class="tabs" data-target="query">
+                    <li class="tab active" data-for="query">Query</li>
+                    <li class="tab" data-for="headers">Headers</li>
+                    <li class="tab" data-for="auth">Auth</li>
+                    <li class="tab" data-for="body">Body</li>
+                </ul>
+            </div>
+            <div id="query" class="content flex_grow_1 scroll" data-target="query">
+                <form name="query">
+                    <div class="w-100 group_input">
+                        <input class="inputName" type="text" placeholder="parameter" />
+                        <input class="inputValue" type="text" placeholder="value" />
+                    </div>
+                </form>
+            </div>
+            <div id="headers" class="content flex_grow_1 scroll" data-target="query" style="display:none;"></div>
+            <div id="auth" class="content flex_grow_1 scroll" data-target="query" style="display:none;">
+                <form name="auth">
+                    <div class="w-100 group_input">
+                        <select class="inputParameter" type="text" placeholder="parameter">
+                            <option value="Bearer">Bearer</option>
+                        </select>
+                        <input class="inputValue" type="text" placeholder="value" />
+                    </div>
+                </form>
+            </div>
+            <div id="body" class="content flex_grow_1 scroll" data-target="query" style="display:none;">
+                <form name="body">
+                    <div class="w-100 group_input">
+                        <input class="inputParameter" type="text" placeholder="parameter" />
+                        <input class="inputValue" type="text" placeholder="value" />
+                    </div>
+                </form>
+            </div>
         </aside>
         <article class="flex_column flex_grow_1">
             <div class="status">
                 <p>Status: <span id="status"></span></p>
             </div>
             <div>
-                <ul class="tabs">
+                <ul class="tabs" data-target="response">
                     <li class="tab active" data-for="response">Response</li>
                     <li class="tab" data-for="headers">Headers</li>
                 </ul>
             </div>
-            <div id="response" class="content flex_grow_1 scroll"></div>
-            <div id="headers" class="content flex_grow_1 scroll" style="display:none;"></div>
+            <div id="response" class="content flex_grow_1 scroll" data-target="response"></div>
+            <div id="headers" class="content flex_grow_1 scroll" data-target="response" style="display:none;"></div>
             <div id="loader" class="loader">
                 <div></div>
             </div>

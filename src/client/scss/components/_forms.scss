@@ -3,9 +3,9 @@
 select,
 button,
 input {
-    height: 25px;
+    height: variables.$main-height;
     border-radius: 0;
-    border: thin solid variables.$primary;
+    border: thin solid rgba(variables.$primary, 0.7);
     padding: 0 10px;
 }
 
@@ -32,5 +32,17 @@ select {
 
     *:last-child {
         border-radius: 0 variables.$borderRadius variables.$borderRadius 0;
+    }
+
+    &:has(> :nth-child(2):last-child)>*,
+    &:has(> :nth-child(3):last-child)> :nth-child(2) {
+        flex-grow: 1;
+    }
+}
+
+input {
+    &:focus-visible {
+        outline: none;
+        border: thin solid rgba(variables.$primary, 1);
     }
 }

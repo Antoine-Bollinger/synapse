@@ -1,21 +1,26 @@
 export default class Tabs {
-    tabs: NodeListOf<HTMLElement>
-    contents: NodeListOf<HTMLElement>
+    tabContainers: NodeListOf<HTMLElement>
+    // contents: NodeListOf<HTMLElement>
 
     constructor() {
-        this.tabs = document.querySelectorAll(".tab")
-        this.contents = document.querySelectorAll(".content")
+        this.tabContainers = document.querySelectorAll(".tabs")
+        // this.contents = document.querySelectorAll(".content")
         this.eventListeners()
     }
 
     eventListeners() {
-        this.tabs?.forEach(tab => {
-            tab.addEventListener("click", _ => {
-                this.contents.forEach(content => content.style.display = "none")
-                this.tabs.forEach(tab => tab.classList.remove("active"))
-                const content = [...this.contents].filter(content => content.id === tab.dataset.for)[0]
-                content.style.display = "block"
-                tab.classList.add("active")
+        this.tabContainers?.forEach(tabContainer => {
+            const tabs = tabContainer.querySelectorAll(".tab") as NodeListOf<HTMLElement>
+            const contents = document.querySelectorAll(`.content[data-target="${tabContainer.dataset.target}"]`) as NodeListOf<HTMLElement>
+            console.log(contents)
+            tabs.forEach(tab => {
+                tab.addEventListener("click", _ => {
+                    contents.forEach(content => content.style.display = "none")
+                    tabs.forEach(tab => tab.classList.remove("active"))
+                    const content = [...contents].filter(content => content.id === tab.dataset.for)[0]
+                    content.style.display = "block"
+                    tab.classList.add("active")
+                })
             })
         })
     }

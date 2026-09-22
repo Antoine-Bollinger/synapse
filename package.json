@@ -7,7 +7,7 @@
     "watch-client": "webpack --watch --mode development",
     "build-server": "tsc -p tsconfig.server.json",
     "watch-server": "tsc --watch -p tsconfig.server.json",
-    "server": "nodemon dist/app.js"
+    "server": "nodemon api/app.js"
   },
   "keywords": [],
   "author": "",

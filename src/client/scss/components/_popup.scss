@@ -21,20 +21,20 @@
     }
 
     .popup-body {
-        height: 20px;
+        height: variables.$main-height;
         display: flex;
         justify-content: center;
         align-items: center;
 
         p {
-            height: variables.$line-height;
-            line-height: variables.$line-height;
-            font-size: variables.$line-height;
+            height: variables.$second-height;
+            line-height: variables.$second-height;
+            font-size: variables.$second-height;
         }
 
         i {
-            height: variables.$line-height;
-            width: variables.$line-height;
+            height: variables.$second-height;
+            width: variables.$second-height;
         }
     }
 

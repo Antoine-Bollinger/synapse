@@ -5,7 +5,7 @@
     align-items: start;
     justify-content: center;
     flex-direction: column;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 .flex_center {
@@ -13,7 +13,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 .flex_end {
@@ -21,22 +21,29 @@
     align-items: end;
     justify-content: center;
     flex-direction: column;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 .flex_column {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 .flex_columns {
     display: flex;
-    gap: 10px;
+    gap: variables.$gap;
 
     >* {
         flex: 1;
         min-width: 0;
+        width: 100%;
+    }
+
+    flex-direction: column;
+
+    @media screen and (min-width: 900px) {
+        flex-direction: row;
     }
 }
 
@@ -48,12 +55,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: variables.$gap;
 }
 
 .scroll {
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+.w_100 {
+    width: 100%;
 }
 
 .loader {
