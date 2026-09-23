@@ -37,6 +37,8 @@ export default class Synapse {
                 const url = (inputs.namedItem("url") as HTMLInputElement).value
                 const method = (inputs.namedItem("method") as HTMLInputElement).value
 
+                const query = this.setQuery()
+
                 let headers: HeadersType = this.setHeaders()
 
                 const auth = this.setAuth()
@@ -48,7 +50,7 @@ export default class Synapse {
 
                 const body = JSON.stringify({
                     method: method,
-                    url: url,
+                    url: `${url}${query}`,
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 })
@@ -61,7 +63,11 @@ export default class Synapse {
                     body
                 });
 
+                console.log(body)
+
                 const result = await response.json()
+
+                console.log(result)
 
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers))
                 const responseHtml = this.jsonParser.parse(result.body)
@@ -81,25 +87,16 @@ export default class Synapse {
         })
     }
 
-    setBodyData(): string {
-        const bodyForm = document.forms.namedItem("body")
-        const bodyParameters = bodyForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
-        let data: string = ""
-        bodyParameters.forEach((bodyParameter, index) => {
-            const parameter = (bodyParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
-            const value = (bodyParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
-            data += `${index > 0 ? "&" : ""}${parameter}=${value}`
+    setQuery(): string {
+        const queryForm = document.forms.namedItem("query")
+        const queryParameters = queryForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+        let query = ""
+        queryParameters.forEach((queryParameter, index) => {
+            const parameter = (queryParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
+            const value = (queryParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
+            query += `${index > 0 ? "&" : "?"}${parameter}=${value}`
         })
-        return data
-    }
-
-    setAuth(): string {
-        const authForm = document.forms.namedItem("auth")
-        const authParameters = authForm?.querySelector(".group_input") as HTMLElement
-        const parameter = (authParameters.querySelector(`.inputName`) as HTMLSelectElement)?.value
-        const value = (authParameters.querySelector(`.inputValue`) as HTMLInputElement)?.value
-        const auth = `${parameter} ${value}`
-        return auth
+        return query
     }
 
     setHeaders(): HeadersType {
@@ -113,6 +110,27 @@ export default class Synapse {
                 headers[header] = value
         })
         return headers
+    }
+
+    setAuth(): string {
+        const authForm = document.forms.namedItem("auth")
+        const authParameters = authForm?.querySelector(".group_input") as HTMLElement
+        const parameter = (authParameters.querySelector(`.inputName`) as HTMLSelectElement)?.value
+        const value = (authParameters.querySelector(`.inputValue`) as HTMLInputElement)?.value
+        const auth = `${parameter} ${value}`
+        return auth
+    }
+
+    setBodyData(): string {
+        const bodyForm = document.forms.namedItem("body")
+        const bodyParameters = bodyForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+        let data: string = ""
+        bodyParameters.forEach((bodyParameter, index) => {
+            const parameter = (bodyParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
+            const value = (bodyParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
+            data += `${index > 0 ? "&" : ""}${parameter}=${value}`
+        })
+        return data
     }
 
     resetResponse() {

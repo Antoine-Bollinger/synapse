@@ -1,5 +1,4 @@
 import express from "express"
-// import ServerlessHttp from "serverless-http"
 
 const app = express()
 
@@ -34,6 +33,3 @@ app.post("/proxy", async (req, res) => {
 app.listen(3000, () => {
     console.log("Server running on port 3000")
 })
-
-// export default ServerlessHttp(app)
-

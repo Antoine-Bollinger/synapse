@@ -361,6 +361,7 @@ class Synapse {
                 const inputs = mainForm.elements;
                 const url = inputs.namedItem("url").value;
                 const method = inputs.namedItem("method").value;
+                const query = this.setQuery();
                 let headers = this.setHeaders();
                 const auth = this.setAuth();
                 if (auth !== "") {
@@ -369,7 +370,7 @@ class Synapse {
                 const data = this.setBodyData();
                 const body = JSON.stringify({
                     method: method,
-                    url: url,
+                    url: `${url}${query}`,
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 });
@@ -380,7 +381,9 @@ class Synapse {
                     },
                     body
                 });
+                console.log(body);
                 const result = await response.json();
+                console.log(result);
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers));
                 const responseHtml = this.jsonParser.parse(result.body);
                 this.headers.innerHTML = headersHtml;
@@ -399,24 +402,16 @@ class Synapse {
             }
         });
     }
-    setBodyData() {
-        const bodyForm = document.forms.namedItem("body");
-        const bodyParameters = bodyForm?.querySelectorAll(".group_input");
-        let data = "";
-        bodyParameters.forEach((bodyParameter, index) => {
-            const parameter = bodyParameter.querySelector(`.inputName`)?.value;
-            const value = bodyParameter.querySelector(`.inputValue`)?.value;
-            data += `${index > 0 ? "&" : ""}${parameter}=${value}`;
+    setQuery() {
+        const queryForm = document.forms.namedItem("query");
+        const queryParameters = queryForm?.querySelectorAll(".group_input");
+        let query = "";
+        queryParameters.forEach((queryParameter, index) => {
+            const parameter = queryParameter.querySelector(`.inputName`)?.value;
+            const value = queryParameter.querySelector(`.inputValue`)?.value;
+            query += `${index > 0 ? "&" : "?"}${parameter}=${value}`;
         });
-        return data;
-    }
-    setAuth() {
-        const authForm = document.forms.namedItem("auth");
-        const authParameters = authForm?.querySelector(".group_input");
-        const parameter = authParameters.querySelector(`.inputName`)?.value;
-        const value = authParameters.querySelector(`.inputValue`)?.value;
-        const auth = `${parameter} ${value}`;
-        return auth;
+        return query;
     }
     setHeaders() {
         const headersForm = document.forms.namedItem("headers");
@@ -429,6 +424,25 @@ class Synapse {
                 headers[header] = value;
         });
         return headers;
+    }
+    setAuth() {
+        const authForm = document.forms.namedItem("auth");
+        const authParameters = authForm?.querySelector(".group_input");
+        const parameter = authParameters.querySelector(`.inputName`)?.value;
+        const value = authParameters.querySelector(`.inputValue`)?.value;
+        const auth = `${parameter} ${value}`;
+        return auth;
+    }
+    setBodyData() {
+        const bodyForm = document.forms.namedItem("body");
+        const bodyParameters = bodyForm?.querySelectorAll(".group_input");
+        let data = "";
+        bodyParameters.forEach((bodyParameter, index) => {
+            const parameter = bodyParameter.querySelector(`.inputName`)?.value;
+            const value = bodyParameter.querySelector(`.inputValue`)?.value;
+            data += `${index > 0 ? "&" : ""}${parameter}=${value}`;
+        });
+        return data;
     }
     resetResponse() {
         this.response.innerText = "";
