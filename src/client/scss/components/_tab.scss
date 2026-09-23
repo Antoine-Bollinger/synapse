@@ -5,18 +5,19 @@
     height: variables.$main-height;
     gap: variables.$gap;
     list-style: none;
-    border-bottom: thin solid variables.$primary;
+    border-bottom: 1px solid variables.$primary;
 
     .tab {
         cursor: pointer;
         height: variables.$main-height;
         line-height: variables.$main-height;
         padding: 0 10px;
-        transition: all 0.2s;
+        border-bottom: 1px solid variables.$primary;
+        transition: border-bottom 0.05s, font-weight 0.1s;
 
         &.active {
             font-weight: bold;
-            border-bottom: 2px solid variables.$primary;
+            border-bottom: 3px solid variables.$primary;
         }
     }
 }

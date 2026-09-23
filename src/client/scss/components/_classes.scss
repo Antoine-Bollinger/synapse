@@ -102,4 +102,17 @@
 
 .add_row {
     height: variables.$main-height;
+
+    >p {
+        color: variables.$primary;
+        font-weight: bold;
+        display: inline-block;
+        opacity: 0.8;
+        transition: opacity 0.1s;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }

@@ -1,6 +1,5 @@
 export default class Tabs {
     tabContainers: NodeListOf<HTMLElement>
-    // contents: NodeListOf<HTMLElement>
 
     constructor() {
         this.tabContainers = document.querySelectorAll(".tabs")

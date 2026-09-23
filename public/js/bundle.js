@@ -215,6 +215,18 @@ class List {
                 const templateId = addRow.dataset.template;
                 const template = document.getElementById(templateId)?.innerHTML;
                 addRow.insertAdjacentHTML("beforebegin", template || "");
+                this.removeListeners();
+            });
+        });
+    }
+    removeListeners() {
+        const removers = document.querySelectorAll(".remover");
+        removers.forEach(remover => {
+            remover.addEventListener("click", (event) => {
+                event.preventDefault();
+                const target = event.target;
+                const rowToRemove = target.closest(".group_input");
+                rowToRemove?.remove();
             });
         });
     }
@@ -361,7 +373,6 @@ class Synapse {
                     headers,
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 });
-                console.log(body);
                 const response = await fetch(_config__WEBPACK_IMPORTED_MODULE_0__.API_URL, {
                     method: "POST",
                     headers: {
@@ -370,7 +381,6 @@ class Synapse {
                     body
                 });
                 const result = await response.json();
-                console.log(result);
                 const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers));
                 const responseHtml = this.jsonParser.parse(result.body);
                 this.headers.innerHTML = headersHtml;
@@ -450,7 +460,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class Tabs {
     tabContainers;
-    // contents: NodeListOf<HTMLElement>
     constructor() {
         this.tabContainers = document.querySelectorAll(".tabs");
         this.eventListeners();

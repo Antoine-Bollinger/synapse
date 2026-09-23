@@ -47,8 +47,11 @@
                         <input class="inputName" type="text" placeholder="parameter" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
-                    <div class="add_row" data-template="queryTemplate"><i class="fa-solid fa-circle-plus"></i>&nbsp;Add
-                        row</div>
+                    <div class="add_row" data-template="queryTemplate">
+                        <p>
+                            <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
+                        </p>
+                    </div>
                 </form>
             </div>
             <div id="headers" class="content" data-target="query" style="display:none;">
@@ -57,8 +60,11 @@
                         <input class="inputName" type="text" placeholder="header" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
-                    <div class="add_row" data-template="headersTemplate"><i
-                            class="fa-solid fa-circle-plus"></i>&nbsp;Add row</div>
+                    <div class="add_row" data-template="headersTemplate">
+                        <p>
+                            <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
+                        </p>
+                    </div>
                 </form>
             </div>
             <div id="auth" class="content" data-target="query" style="display:none;">
@@ -77,8 +83,11 @@
                         <input class="inputName" type="text" placeholder="name" />
                         <input class="inputValue" type="text" placeholder="value" />
                     </div>
-                    <div class="add_row" data-template="bodyTemplate"><i class="fa-solid fa-circle-plus"></i>&nbsp;Add
-                        row</div>
+                    <div class="add_row" data-template="bodyTemplate">
+                        <p>
+                            <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
+                        </p>
+                    </div>
                 </form>
             </div>
         </aside>
@@ -119,6 +128,7 @@
     <div class="w-100 group_input">
         <input class="inputName" type="text" placeholder="parameter" />
         <input class="inputValue" type="text" placeholder="value" />
+        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
     </div>
 </template>
 
@@ -126,6 +136,7 @@
     <div class="w-100 group_input">
         <input class="inputName" type="text" placeholder="header" />
         <input class="inputValue" type="text" placeholder="value" />
+        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
     </div>
 </template>
 
@@ -133,6 +144,7 @@
     <div class="w-100 group_input">
         <input class="inputName" type="text" placeholder="name" />
         <input class="inputValue" type="text" placeholder="value" />
+        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
     </div>
 </template>
 

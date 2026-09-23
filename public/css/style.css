@@ -169,11 +169,23 @@ article {
 .add_row {
   height: 26px;
 }
+.add_row > p {
+  color: #4F5B93;
+  font-weight: bold;
+  display: inline-block;
+  opacity: 0.8;
+  transition: opacity 0.1s;
+  cursor: pointer;
+}
+.add_row > p:hover {
+  opacity: 1;
+}
 
 select,
 button,
 input {
   height: 26px;
+  line-height: 26px;
   border-radius: 0;
   border: thin solid rgba(79, 91, 147, 0.7);
   padding: 0 10px;
@@ -184,6 +196,12 @@ button {
   background-color: #4F5B93;
   color: white;
   text-align: center;
+  cursor: pointer;
+}
+select.danger,
+button.danger {
+  background-color: #DC3545;
+  border-color: #DC3545;
 }
 
 button,
@@ -202,7 +220,19 @@ select {
 .group_input *:last-child {
   border-radius: 0 4px 4px 0;
 }
+.group_input:has(> :nth-child(2):last-child) > :nth-child(2) {
+  border-left: none;
+}
+.group_input:has(> :nth-child(3):last-child) > :nth-child(1) {
+  border-right: none;
+}
+.group_input:has(> :nth-child(3):last-child) > :nth-child(3) {
+  border-left: none;
+}
 .group_input:has(> :nth-child(2):last-child) > *, .group_input:has(> :nth-child(3):last-child) > :nth-child(2) {
+  flex-grow: 1;
+}
+.group_input:has(> :nth-child(3):last-child):has(> :nth-child(1):is(input)) > :nth-child(1) {
   flex-grow: 1;
 }
 
@@ -323,18 +353,19 @@ input:focus-visible {
   height: 26px;
   gap: 16px;
   list-style: none;
-  border-bottom: thin solid #4F5B93;
+  border-bottom: 1px solid #4F5B93;
 }
 .tabs .tab {
   cursor: pointer;
   height: 26px;
   line-height: 26px;
   padding: 0 10px;
-  transition: all 0.2s;
+  border-bottom: 1px solid #4F5B93;
+  transition: border-bottom 0.05s, font-weight 0.1s;
 }
 .tabs .tab.active {
   font-weight: bold;
-  border-bottom: 2px solid #4F5B93;
+  border-bottom: 3px solid #4F5B93;
 }
 
 /*# sourceMappingURL=style.css.map*/
