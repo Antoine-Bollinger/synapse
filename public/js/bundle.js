@@ -26,8 +26,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   TIMEOUT_SEC: () => (/* binding */ TIMEOUT_SEC)
 /* harmony export */ });
 const TIMEOUT_SEC = 60;
-// export const API_URL = "https://synapse-rouge-two.vercel.app/proxy"
-const API_URL = "http://localhost:3000/proxy";
+const API_URL = "https://synapse-rouge-two.vercel.app/proxy";
+// export const API_URL = "http://localhost:3000/proxy"
 
 
 /***/ },
