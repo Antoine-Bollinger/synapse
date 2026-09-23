@@ -1,9 +1,12 @@
 export default class List {
+    queries: NodeListOf<HTMLDivElement>
     addRows: NodeListOf<HTMLDivElement>
 
     constructor() {
+        this.queries = document.querySelectorAll(`.content[data-target="query"]`)
         this.addRows = document.querySelectorAll(".add_row")
         this.eventListeners()
+        this.notificationListeners()
     }
 
     eventListeners() {
@@ -14,6 +17,7 @@ export default class List {
                 const template = document.getElementById(templateId as string)?.innerHTML
                 addRow.insertAdjacentHTML("beforebegin", template || "")
                 this.removeListeners()
+                this.notificationListeners()
             })
         })
     }
@@ -25,8 +29,38 @@ export default class List {
                 event.preventDefault()
                 const target = event.target as HTMLButtonElement
                 const rowToRemove = target.closest(".group_input")
+                const section = target.closest(`.content[data-target="query"]`)
                 rowToRemove?.remove()
+                this.addNotification(section)
+                this.notificationListeners()
             })
         })
+    }
+
+    notificationListeners() {
+        this.queries.forEach(query => {
+            const inputs = query.querySelectorAll(".inputName, .inputValue")
+            inputs.forEach(input => {
+                input.addEventListener("change", event => {
+                    const target = event.target as HTMLInputElement
+                    const section = target.closest(`.content[data-target="query"]`)
+                    this.addNotification(section)
+                })
+            })
+        })
+    }
+
+    addNotification(section: Element | null) {
+        console.log(section)
+
+        const inputs = section?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+        let notification = 0
+        inputs?.forEach(input => {
+            const name = input.querySelector(".inputName") as HTMLInputElement
+            const value = input.querySelector(".inputValue") as HTMLInputElement
+            notification += (name.value !== "" || value.value !== "") ? 1 : 0
+        })
+        const notificationSpan = document.querySelector(`ul.tabs[data-target="query"] li.tab[data-for="${section?.id}"] sup`)
+        notificationSpan!.innerHTML = `${notification === 0 ? "" : notification}`
     }
 }

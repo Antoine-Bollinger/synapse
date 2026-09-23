@@ -8,6 +8,7 @@
     border-bottom: 1px solid variables.$primary;
 
     .tab {
+        position: relative;
         cursor: pointer;
         height: variables.$main-height;
         line-height: variables.$main-height;
@@ -19,5 +20,13 @@
             font-weight: bold;
             border-bottom: 3px solid variables.$primary;
         }
+
+        sup {
+            position: absolute;
+            top: 0;
+            right: 0;
+            line-height: calc(variables.$main-height / 1.5);
+        }
     }
+
 }

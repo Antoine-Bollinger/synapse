@@ -102,7 +102,9 @@ export default class Synapse {
     setHeaders(): HeadersType {
         const headersForm = document.forms.namedItem("headers")
         const headersParameters = headersForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
-        let headers: HeadersType = {}
+        let headers: HeadersType = {
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
         headersParameters.forEach(headersParameter => {
             const header = (headersParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
             const value = (headersParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
@@ -117,7 +119,7 @@ export default class Synapse {
         const authParameters = authForm?.querySelector(".group_input") as HTMLElement
         const parameter = (authParameters.querySelector(`.inputName`) as HTMLSelectElement)?.value
         const value = (authParameters.querySelector(`.inputValue`) as HTMLInputElement)?.value
-        const auth = `${parameter} ${value}`
+        const auth = value !== "" ? `${parameter} ${value}` : ""
         return auth
     }
 
