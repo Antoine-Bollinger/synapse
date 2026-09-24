@@ -20,8 +20,8 @@ export default class JSONParser {
                         ${jsonToHtmlList(jsonObject)}
                     </ul>
                 `
-        } catch (error) {
-            console.log(error)
+        } catch (error: unknown) {
+            html = String(error)
         }
         return html
     }

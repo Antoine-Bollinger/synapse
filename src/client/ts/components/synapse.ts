@@ -1,5 +1,7 @@
+import { ApiResponse } from "../../types/apiResponse"
 import { HeadersType } from "../../types/headers"
 import { API_URL } from "./config"
+import CustomError from "./error"
 import { isJsonString } from "./helpers"
 import JSONParser from "./jsonparser"
 import Loader from "./loader"
@@ -22,10 +24,11 @@ export default class Synapse {
         this.formSubmitHandler()
     }
 
-    formSubmitHandler() {
+    private formSubmitHandler() {
         this.mainForm.addEventListener("submit", async (event) => {
             event.preventDefault()
             this.loader.show()
+            let result: ApiResponse
             try {
                 this.resetHeaders()
                 this.resetResponse()
@@ -36,6 +39,9 @@ export default class Synapse {
 
                 const url = (inputs.namedItem("url") as HTMLInputElement).value
                 const method = (inputs.namedItem("method") as HTMLInputElement).value
+
+                if (url === "")
+                    throw new CustomError("Please enter a valid url.", 422)
 
                 const query = this.setQuery()
 
@@ -61,45 +67,32 @@ export default class Synapse {
                         "Content-Type": "application/json"
                     },
                     body
-                });
-
-                console.log(body)
-
-                const result = await response.json()
-
-                console.log(result)
-
-                const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers))
-                const responseHtml = this.jsonParser.parse(result.body)
-                this.headers.innerHTML = headersHtml
-                this.setStatus(result.status.toString())
-
-                if (isJsonString(result.body))
-                    this.response.innerHTML = responseHtml
-                else
-                    this.response.innerText = responseHtml
-                this.jsonParser.eventListener()
+                })
+                result = await response.json()
+                this.displayResult(result)
             } catch (error) {
-                console.log(error)
+                result = this.errorToResult(error)
+                this.displayResult(result)
             } finally {
                 this.loader.hide()
             }
         })
     }
 
-    setQuery(): string {
+    private setQuery(): string {
         const queryForm = document.forms.namedItem("query")
         const queryParameters = queryForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
         let query = ""
         queryParameters.forEach((queryParameter, index) => {
             const parameter = (queryParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
             const value = (queryParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
-            query += `${index > 0 ? "&" : "?"}${parameter}=${value}`
+            if (parameter !== "" && value !== "")
+                query += `${index > 0 ? "&" : "?"}${parameter}=${value}`
         })
         return query
     }
 
-    setHeaders(): HeadersType {
+    private setHeaders(): HeadersType {
         const headersForm = document.forms.namedItem("headers")
         const headersParameters = headersForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
         let headers: HeadersType = {
@@ -114,41 +107,83 @@ export default class Synapse {
         return headers
     }
 
-    setAuth(): string {
+    private setAuth(): string {
         const authForm = document.forms.namedItem("auth")
         const authParameters = authForm?.querySelector(".group_input") as HTMLElement
+        let auth = ""
         const parameter = (authParameters.querySelector(`.inputName`) as HTMLSelectElement)?.value
         const value = (authParameters.querySelector(`.inputValue`) as HTMLInputElement)?.value
-        const auth = value !== "" ? `${parameter} ${value}` : ""
+        if (parameter !== "" && value !== "")
+            auth = `${parameter} ${value}`
         return auth
     }
 
-    setBodyData(): string {
+    private setBodyData(): string {
         const bodyForm = document.forms.namedItem("body")
         const bodyParameters = bodyForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
         let data: string = ""
         bodyParameters.forEach((bodyParameter, index) => {
             const parameter = (bodyParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
             const value = (bodyParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
-            data += `${index > 0 ? "&" : ""}${parameter}=${value}`
+            if (parameter !== "" && value !== "")
+                data += `${index > 0 ? "&" : ""}${parameter}=${value}`
         })
         return data
     }
 
-    resetResponse() {
+    private resetResponse() {
         this.response.innerText = ""
     }
 
-    resetHeaders() {
+    private resetHeaders() {
         this.headers.innerText = ""
     }
 
-    resetStatus() {
+    private resetStatus() {
         this.status.innerText = ""
     }
 
-    setStatus(code: string) {
+    private setStatus(code: string) {
         this.status.innerText = code
         this.status.style.color = code.startsWith("2") ? "green" : "red"
+    }
+
+    private displayResult(result: ApiResponse): void {
+        const headersHtml = this.jsonParser.parse(
+            JSON.stringify(result.headers)
+        )
+
+        const responseHtml = this.jsonParser.parse(result.body)
+
+        this.headers.innerHTML = headersHtml
+        this.setStatus(result.status.toString())
+
+        if (isJsonString(result.body))
+            this.response.innerHTML = responseHtml
+        else
+            this.response.innerText = result.body
+
+        this.jsonParser.eventListener()
+    }
+
+    private errorToResult(error: unknown): ApiResponse {
+        return {
+            status: error instanceof CustomError ? error.code : 0,
+            headers: {},
+            body: JSON.stringify({
+                success: false,
+                error: {
+                    name: error instanceof Error
+                        ? error.name
+                        : "UnknownError",
+                    message: error instanceof Error
+                        ? error.message
+                        : String(error),
+                    stack: error instanceof Error
+                        ? error.stack
+                        : undefined
+                }
+            }, null, 4)
+        }
     }
 }

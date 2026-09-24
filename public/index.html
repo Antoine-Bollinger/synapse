@@ -46,6 +46,7 @@
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="parameter" />
                         <input class="inputValue" type="text" placeholder="value" />
+                        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
                     </div>
                     <div class="add_row" data-template="queryTemplate">
                         <p>
@@ -57,8 +58,15 @@
             <div id="headers" class="content" data-target="query" style="display:none;">
                 <form name="headers" class="flex_column">
                     <div class="w-100 group_input">
-                        <input class="inputName" type="text" placeholder="header" />
-                        <input class="inputValue" type="text" placeholder="value" />
+                        <input class="inputName" type="text" placeholder="header" value="Accept" />
+                        <input class="inputValue" type="text" placeholder="value" value="*/*" />
+                        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
+                    </div>
+                    <div class="w-100 group_input">
+                        <input class="inputName" type="text" placeholder="header" value="Content-Type" />
+                        <input class="inputValue" type="text" placeholder="value"
+                            value="application/x-www-form-urlencoded" />
+                        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
                     </div>
                     <div class="add_row" data-template="headersTemplate">
                         <p>
