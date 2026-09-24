@@ -41,12 +41,12 @@
                     <li class="tab" data-for="body">Body<sup></sup></li>
                 </ul>
             </div>
-            <div id="query" class="content flex_column" data-target="query">
+            <div id="query" class="content flex_column" data-target="query" style="display:flex;">
                 <div class="title">
                     <p>Query Parameters</p>
                 </div>
                 <form name="query" class="flex_column">
-                    <div class="w-100 group_input">
+                    <div class="group_input">
                         <input class="inputName" type="text" placeholder="parameter" />
                         <input class="inputValue" type="text" placeholder="value" />
                         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
@@ -63,12 +63,12 @@
                     <p>HTTP Headers</p>
                 </div>
                 <form name="headers" class="flex_column">
-                    <div class="w-100 group_input">
+                    <div class="group_input">
                         <input class="inputName" type="text" placeholder="header" value="Accept" />
                         <input class="inputValue" type="text" placeholder="value" value="*/*" />
                         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
                     </div>
-                    <div class="w-100 group_input">
+                    <div class="group_input">
                         <input class="inputName" type="text" placeholder="header" value="Content-Type" />
                         <input class="inputValue" type="text" placeholder="value"
                             value="application/x-www-form-urlencoded" />
@@ -81,9 +81,9 @@
                     </div>
                 </form>
             </div>
-            <div id="auth" class="content" data-target="query" style="display:none;">
-                <form name="auth">
-                    <div class="w-100 group_input">
+            <div id="auth" class="content flex_column" data-target="query" style="display:none;">
+                <form name="auth" class="flex_column">
+                    <div class="group_input">
                         <select class="inputName">
                             <option value="Bearer">Bearer</option>
                         </select>
@@ -92,21 +92,40 @@
                 </form>
             </div>
             <div id="body" class="content flex_column" data-target="query" style="display:none;">
-                <div class="title">
-                    <p>Form Encoded</p>
+                <div>
+                    <ul class="tabs" data-target="body">
+                        <li class="tab active" data-for="json">JSON</li>
+                        <li class="tab" data-for="formEncoded">Form-encode</li>
+                    </ul>
                 </div>
-                <form name="body" class="flex_column">
-                    <div class="w-100 group_input">
-                        <input class="inputName" type="text" placeholder="name" />
-                        <input class="inputValue" type="text" placeholder="value" />
-                        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
+                <div id="json" class="content flex_column" data-target="body" style="display:flex;">
+                    <div class="title">
+                        <p>JSON Content</p>
                     </div>
-                    <div class="add_row" data-template="bodyTemplate">
-                        <p>
-                            <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
-                        </p>
+                    <form name="body" class="flex_column">
+                        <div class="group_input">
+                            <textarea class="inputValue"></textarea>
+                            <input class="inputName" type="hidden" value="json" />
+                        </div>
+                    </form>
+                </div>
+                <div id="formEncoded" class="content flex_column" data-target="body" style="display:none;">
+                    <div class="title">
+                        <p>Form Encoded</p>
                     </div>
-                </form>
+                    <form name="body" class="flex_column">
+                        <div class="group_input">
+                            <input class="inputName" type="text" placeholder="name" />
+                            <input class="inputValue" type="text" placeholder="value" />
+                            <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
+                        </div>
+                        <div class="add_row" data-template="bodyTemplate">
+                            <p>
+                                <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
+                            </p>
+                        </div>
+                    </form>
+                </div>
             </div>
         </aside>
         <article class="flex_column flex_grow_1">
@@ -151,7 +170,7 @@
 </body>
 
 <template id="queryTemplate">
-    <div class="w-100 group_input">
+    <div class="group_input">
         <input class="inputName" type="text" placeholder="parameter" />
         <input class="inputValue" type="text" placeholder="value" />
         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
@@ -159,7 +178,7 @@
 </template>
 
 <template id="headersTemplate">
-    <div class="w-100 group_input">
+    <div class="group_input">
         <input class="inputName" type="text" placeholder="header" />
         <input class="inputValue" type="text" placeholder="value" />
         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
@@ -167,7 +186,7 @@
 </template>
 
 <template id="bodyTemplate">
-    <div class="w-100 group_input">
+    <div class="group_input">
         <input class="inputName" type="text" placeholder="name" />
         <input class="inputValue" type="text" placeholder="value" />
         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>

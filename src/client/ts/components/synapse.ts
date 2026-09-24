@@ -126,15 +126,25 @@ export default class Synapse {
     }
 
     private setBodyData(): string {
-        const bodyForm = document.forms.namedItem("body")
-        const bodyParameters = bodyForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+        const forms = document.querySelectorAll("#body form") as NodeListOf<HTMLFormElement>
+        const form = [...forms].filter((form) => (form.closest(`.content[data-target="body"]`) as HTMLFormElement).style.display === "flex")
+        const bodyType = form[0]?.closest(`.content[data-target="body"]`)?.id
+        const parameters = form[0]?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
         let data: string = ""
-        bodyParameters.forEach((bodyParameter, index) => {
-            const parameter = (bodyParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
-            const value = (bodyParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
-            if (parameter !== "" && value !== "")
-                data += `${index > 0 ? "&" : ""}${parameter}=${value}`
-        })
+        switch (bodyType) {
+            case "json":
+                const value = (parameters[0].querySelector(`.inputValue`) as HTMLInputElement)?.value
+                data = JSON.stringify(value)
+                break
+            case "formEncoded":
+                parameters.forEach((parameter, index) => {
+                    const name = (parameter.querySelector(`.inputName`) as HTMLInputElement)?.value
+                    const value = (parameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
+                    if (name !== "" && value !== "")
+                        data += `${index > 0 ? "&" : ""}${name}=${value}`
+                })
+                break
+        }
         return data
     }
 
