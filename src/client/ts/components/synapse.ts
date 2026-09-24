@@ -95,9 +95,7 @@ export default class Synapse {
     private setHeaders(): HeadersType {
         const headersForm = document.forms.namedItem("headers")
         const headersParameters = headersForm?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
-        let headers: HeadersType = {
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
+        let headers: HeadersType = {}
         headersParameters.forEach(headersParameter => {
             const header = (headersParameter.querySelector(`.inputName`) as HTMLInputElement)?.value
             const value = (headersParameter.querySelector(`.inputValue`) as HTMLInputElement)?.value

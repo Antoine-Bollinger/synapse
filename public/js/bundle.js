@@ -469,9 +469,7 @@ class Synapse {
     setHeaders() {
         const headersForm = document.forms.namedItem("headers");
         const headersParameters = headersForm?.querySelectorAll(".group_input");
-        let headers = {
-            "Content-Type": "application/x-www-form-urlencoded"
-        };
+        let headers = {};
         headersParameters.forEach(headersParameter => {
             const header = headersParameter.querySelector(`.inputName`)?.value;
             const value = headersParameter.querySelector(`.inputValue`)?.value;
