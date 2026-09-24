@@ -397,6 +397,8 @@ class Synapse {
     response;
     headers;
     status;
+    size;
+    time;
     loader;
     constructor() {
         this.jsonParser = new _jsonparser__WEBPACK_IMPORTED_MODULE_3__["default"]();
@@ -404,6 +406,8 @@ class Synapse {
         this.response = document.getElementById("response");
         this.headers = document.querySelector("article #headers");
         this.status = document.getElementById("status");
+        this.size = document.getElementById("size");
+        this.time = document.getElementById("time");
         this.loader = new _loader__WEBPACK_IMPORTED_MODULE_4__["default"]();
         this.formSubmitHandler();
     }
@@ -412,10 +416,13 @@ class Synapse {
             event.preventDefault();
             this.loader.show();
             let result;
+            let start = Date.now();
             try {
                 this.resetHeaders();
                 this.resetResponse();
                 this.resetStatus();
+                this.resetSize();
+                this.resetTime();
                 const mainForm = event.target;
                 const inputs = mainForm.elements;
                 const url = inputs.namedItem("url").value;
@@ -443,10 +450,12 @@ class Synapse {
                     body
                 });
                 result = await response.json();
+                result.time = Date.now() - start;
                 this.displayResult(result);
             }
             catch (error) {
                 result = this.errorToResult(error);
+                result.time = Date.now() - start;
                 this.displayResult(result);
             }
             finally {
@@ -513,11 +522,27 @@ class Synapse {
         this.status.innerText = code;
         this.status.style.color = code.startsWith("2") ? "green" : "red";
     }
+    resetSize() {
+        this.size.innerText = "";
+    }
+    setSize(size) {
+        this.size.innerText = size;
+        this.size.style.color = size.startsWith("0") ? "red" : "green";
+    }
+    resetTime() {
+        this.time.innerText = "";
+    }
+    setTime(time) {
+        this.time.innerText = time;
+        this.time.style.color = time.startsWith("0") ? "red" : "green";
+    }
     displayResult(result) {
         const headersHtml = this.jsonParser.parse(JSON.stringify(result.headers));
-        const responseHtml = this.jsonParser.parse(result.body);
         this.headers.innerHTML = headersHtml;
         this.setStatus(result.status.toString());
+        this.setSize(this.getResponseSize(result));
+        this.setTime(`${result.time} ms`);
+        const responseHtml = this.jsonParser.parse(result.body);
         if ((0,_helpers__WEBPACK_IMPORTED_MODULE_2__.isJsonString)(result.body))
             this.response.innerHTML = responseHtml;
         else
@@ -543,6 +568,9 @@ class Synapse {
                 }
             }, null, 4)
         };
+    }
+    getResponseSize(result) {
+        return `${new Blob([result.body]).size ?? 0} bytes`;
     }
 }
 

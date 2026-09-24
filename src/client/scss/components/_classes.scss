@@ -58,6 +58,13 @@
     gap: variables.$gap;
 }
 
+.flex_row_start {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: variables.$gap;
+}
+
 .scroll {
     overflow-y: scroll;
     overflow-x: hidden;

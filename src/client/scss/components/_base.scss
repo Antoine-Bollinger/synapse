@@ -58,8 +58,11 @@ article {
     font-size: 0.8em;
 }
 
-.status {
+.status,
+.size,
+.time {
     height: variables.$main-height;
+    min-width: 100px;
     display: flex;
 
     >p {

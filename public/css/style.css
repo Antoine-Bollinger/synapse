@@ -59,11 +59,16 @@ article {
   font-size: 0.8em;
 }
 
-.status {
+.status,
+.size,
+.time {
   height: 26px;
+  min-width: 100px;
   display: flex;
 }
-.status > p {
+.status > p,
+.size > p,
+.time > p {
   font-weight: bold;
   line-height: 26px;
 }
@@ -124,6 +129,13 @@ article {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+}
+
+.flex_row_start {
+  display: flex;
+  align-items: center;
+  justify-content: start;
   gap: 16px;
 }
 

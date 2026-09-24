@@ -12,6 +12,8 @@ export default class Synapse {
     response: HTMLDivElement
     headers: HTMLDivElement
     status: HTMLElement
+    size: HTMLElement
+    time: HTMLElement
     loader: Loader
 
     constructor() {
@@ -20,6 +22,8 @@ export default class Synapse {
         this.response = document.getElementById("response") as HTMLDivElement
         this.headers = document.querySelector("article #headers") as HTMLDivElement
         this.status = document.getElementById("status") as HTMLElement
+        this.size = document.getElementById("size") as HTMLElement
+        this.time = document.getElementById("time") as HTMLElement
         this.loader = new Loader()
         this.formSubmitHandler()
     }
@@ -29,10 +33,13 @@ export default class Synapse {
             event.preventDefault()
             this.loader.show()
             let result: ApiResponse
+            let start = Date.now()
             try {
                 this.resetHeaders()
                 this.resetResponse()
                 this.resetStatus()
+                this.resetSize()
+                this.resetTime()
 
                 const mainForm = event.target as HTMLFormElement
                 const inputs = mainForm.elements as HTMLFormControlsCollection
@@ -69,9 +76,11 @@ export default class Synapse {
                     body
                 })
                 result = await response.json()
+                result.time = Date.now() - start
                 this.displayResult(result)
             } catch (error) {
                 result = this.errorToResult(error)
+                result.time = Date.now() - start
                 this.displayResult(result)
             } finally {
                 this.loader.hide()
@@ -146,15 +155,36 @@ export default class Synapse {
         this.status.style.color = code.startsWith("2") ? "green" : "red"
     }
 
+    private resetSize() {
+        this.size.innerText = ""
+    }
+
+    private setSize(size: string) {
+        this.size.innerText = size
+        this.size.style.color = size.startsWith("0") ? "red" : "green"
+    }
+
+    private resetTime() {
+        this.time.innerText = ""
+    }
+
+    private setTime(time: string) {
+        this.time.innerText = time
+        this.time.style.color = time.startsWith("0") ? "red" : "green"
+    }
+
     private displayResult(result: ApiResponse): void {
         const headersHtml = this.jsonParser.parse(
             JSON.stringify(result.headers)
         )
 
-        const responseHtml = this.jsonParser.parse(result.body)
-
         this.headers.innerHTML = headersHtml
+
         this.setStatus(result.status.toString())
+        this.setSize(this.getResponseSize(result))
+        this.setTime(`${result.time} ms`)
+
+        const responseHtml = this.jsonParser.parse(result.body)
 
         if (isJsonString(result.body))
             this.response.innerHTML = responseHtml
@@ -183,5 +213,9 @@ export default class Synapse {
                 }
             }, null, 4)
         }
+    }
+
+    private getResponseSize(result: ApiResponse): string {
+        return `${new Blob([result.body]).size ?? 0} bytes`
     }
 }
