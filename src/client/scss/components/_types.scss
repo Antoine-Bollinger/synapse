@@ -1,0 +1,34 @@
+q {
+    quotes: none;
+}
+
+.boolean {
+    color: blue;
+    font-weight: bold;
+}
+
+.string {
+    color: #a8664c;
+    quotes: "\"" "\"";
+}
+
+.null {
+    color: blue;
+    // font-style: italic;
+}
+
+.number {
+    color: #42885a;
+    font-weight: bold;
+}
+
+.context {
+    color: black;
+    opacity: 0.5;
+    font-style: italic;
+    transition: opacity 0.1s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

@@ -41,7 +41,10 @@
                     <li class="tab" data-for="body">Body<sup></sup></li>
                 </ul>
             </div>
-            <div id="query" class="content" data-target="query">
+            <div id="query" class="content flex_column" data-target="query">
+                <div class="title">
+                    <p>Query Parameters</p>
+                </div>
                 <form name="query" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="parameter" />
@@ -55,7 +58,10 @@
                     </div>
                 </form>
             </div>
-            <div id="headers" class="content" data-target="query" style="display:none;">
+            <div id="headers" class="content flex_column" data-target="query" style="display:none;">
+                <div class="title">
+                    <p>HTTP Headers</p>
+                </div>
                 <form name="headers" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="header" value="Accept" />
@@ -85,7 +91,10 @@
                     </div>
                 </form>
             </div>
-            <div id="body" class="content" data-target="query" style="display:none;">
+            <div id="body" class="content flex_column" data-target="query" style="display:none;">
+                <div class="title">
+                    <p>Form Encoded</p>
+                </div>
                 <form name="body" class="flex_column">
                     <div class="w-100 group_input">
                         <input class="inputName" type="text" placeholder="name" />

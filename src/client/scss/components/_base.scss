@@ -58,6 +58,11 @@ article {
     font-size: 0.8em;
 }
 
+.title {
+    height: variables.$main-height;
+    line-height: variables.$main-height;
+}
+
 .status,
 .size,
 .time {

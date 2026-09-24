@@ -59,6 +59,11 @@ article {
   font-size: 0.8em;
 }
 
+.title {
+  height: 26px;
+  line-height: 26px;
+}
+
 .status,
 .size,
 .time {
@@ -385,6 +390,39 @@ input:focus-visible {
   top: 0;
   right: 0;
   line-height: 17.3333333333px;
+}
+
+q {
+  quotes: none;
+}
+
+.boolean {
+  color: blue;
+  font-weight: bold;
+}
+
+.string {
+  color: #a8664c;
+  quotes: '"' '"';
+}
+
+.null {
+  color: blue;
+}
+
+.number {
+  color: #42885a;
+  font-weight: bold;
+}
+
+.context {
+  color: black;
+  opacity: 0.5;
+  font-style: italic;
+  transition: opacity 0.1s;
+}
+.context:hover {
+  opacity: 0.8;
 }
 
 /*# sourceMappingURL=style.css.map*/
