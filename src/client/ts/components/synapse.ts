@@ -198,10 +198,19 @@ export default class Synapse {
 
         if (isJsonString(result.body))
             this.response.innerHTML = responseHtml
+        else if (result.body.toLowerCase().trim().startsWith("<!doctype html>"))
+            this.response.appendChild(this.displayIframe(result.body))
         else
             this.response.innerText = result.body
 
         this.jsonParser.eventListener()
+    }
+
+    private displayIframe(html: string): HTMLElement {
+        const iframe = document.createElement("iframe")
+        iframe.srcdoc = html
+        return iframe
+
     }
 
     private errorToResult(error: unknown): ApiResponse {
