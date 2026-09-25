@@ -210,7 +210,6 @@ export default class Synapse {
         const iframe = document.createElement("iframe")
         iframe.srcdoc = html
         return iframe
-
     }
 
     private errorToResult(error: unknown): ApiResponse {
