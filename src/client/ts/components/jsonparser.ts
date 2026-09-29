@@ -2,11 +2,9 @@ import { chevronDown, chevronRight, jsonToHtmlList } from "./helpers"
 import Popup from "./popup"
 
 export default class JSONParser {
-    frame: HTMLElement
     popup: Popup
 
     constructor() {
-        this.frame = document.getElementById("frame") as HTMLDivElement
         this.popup = new Popup()
     }
 

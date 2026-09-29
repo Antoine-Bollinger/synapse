@@ -68,6 +68,8 @@ export default class Synapse {
                     data: ["GET", "HEAD"].includes(method) ? null : data
                 })
 
+                console.log(body);
+
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
@@ -111,6 +113,11 @@ export default class Synapse {
             if (header !== "" && value !== "")
                 headers[header] = value
         })
+        const { bodyType } = this.getBodyType()
+        switch (bodyType) {
+            case "formEncoded":
+                headers["Content-Type"] = "application/x-www-form-urlencoded"
+        }
         return headers
     }
 
@@ -125,17 +132,22 @@ export default class Synapse {
         return auth
     }
 
-    private setBodyData(): string {
-        const forms = document.querySelectorAll("#body form") as NodeListOf<HTMLFormElement>
-        const form = [...forms].filter((form) => (form.closest(`.content[data-target="body"]`) as HTMLFormElement).style.display === "flex")
-        const bodyType = form[0]?.closest(`.content[data-target="body"]`)?.id
-        const parameters = form[0]?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
-        let data: string = ""
+    private setBodyData(): string | FormData {
+        const { bodyType, parameters } = this.getBodyType()
+        let data: string | FormData = ""
         switch (bodyType) {
             case "json":
                 const value = (parameters[0].querySelector(`.inputValue`) as HTMLInputElement)?.value
                 data = JSON.stringify(value)
                 break
+            case "form":
+                data = new FormData()
+                parameters.forEach(parameter => {
+                    const name = (parameter.querySelector(`.inputName`) as HTMLInputElement)?.value
+                    const value = (parameter.querySelector(`.inputValue`) as HTMLInputElement)?.value
+                    if (name !== "" && value !== "")
+                        (data as FormData).append(name, value)
+                })
             case "formEncoded":
                 parameters.forEach((parameter, index) => {
                     const name = (parameter.querySelector(`.inputName`) as HTMLInputElement)?.value
@@ -147,6 +159,22 @@ export default class Synapse {
         }
         return data
     }
+
+    private getBodyType(): {
+        bodyType: string,
+        parameters: NodeListOf<HTMLElement>
+    } {
+        const forms = document.querySelectorAll("#body form") as NodeListOf<HTMLFormElement>
+        const form = [...forms].filter((form) => (form.closest(`.content[data-target="body"]`) as HTMLFormElement).style.display === "flex")
+        const bodyType = form[0]?.closest(`.content[data-target="body"]`)?.id
+        const parameters = form[0]?.querySelectorAll(".group_input") as NodeListOf<HTMLElement>
+
+        return {
+            bodyType: bodyType ?? "",
+            parameters
+        }
+    }
+
 
     private resetResponse() {
         this.response.innerText = ""

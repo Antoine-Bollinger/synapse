@@ -68,12 +68,6 @@
                         <input class="inputValue" type="text" placeholder="value" value="*/*" />
                         <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
                     </div>
-                    <div class="group_input">
-                        <input class="inputName" type="text" placeholder="header" value="Content-Type" />
-                        <input class="inputValue" type="text" placeholder="value"
-                            value="application/x-www-form-urlencoded" />
-                        <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
-                    </div>
                     <div class="add_row" data-template="headersTemplate">
                         <p>
                             <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
@@ -95,6 +89,7 @@
                 <div>
                     <ul class="tabs" data-target="body">
                         <li class="tab active" data-for="json">JSON</li>
+                        <li class="tab" data-for="form">Form</li>
                         <li class="tab" data-for="formEncoded">Form-encode</li>
                     </ul>
                 </div>
@@ -106,6 +101,23 @@
                         <div class="group_input">
                             <textarea class="inputValue"></textarea>
                             <input class="inputName" type="hidden" value="json" />
+                        </div>
+                    </form>
+                </div>
+                <div id="form" class="content flex_column" data-target="body" style="display:none;">
+                    <div class="title">
+                        <p>Form Fields</p>
+                    </div>
+                    <form name="body" class="flex_column">
+                        <div class="group_input">
+                            <input class="inputName" type="text" placeholder="name" />
+                            <input class="inputValue" type="text" placeholder="value" />
+                            <button class="danger remover"><i class="fa-regular fa-circle-xmark"></i></button>
+                        </div>
+                        <div class="add_row" data-template="bodyTemplate">
+                            <p>
+                                <i class="fa-solid fa-circle-plus"></i>&nbsp;Add row
+                            </p>
                         </div>
                     </form>
                 </div>
