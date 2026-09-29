@@ -7,10 +7,12 @@ import JSONParser from "./jsonparser"
 import Loader from "./loader"
 
 export default class Synapse {
+    body: string = ""
     jsonParser: JSONParser
     mainForm: HTMLFormElement
     response: HTMLDivElement
     headers: HTMLDivElement
+    code: HTMLDivElement
     status: HTMLElement
     size: HTMLElement
     time: HTMLElement
@@ -21,6 +23,7 @@ export default class Synapse {
         this.mainForm = document.forms[0]
         this.response = document.getElementById("response") as HTMLDivElement
         this.headers = document.querySelector("article #headers") as HTMLDivElement
+        this.code = document.querySelector("article #code") as HTMLDivElement
         this.status = document.getElementById("status") as HTMLElement
         this.size = document.getElementById("size") as HTMLElement
         this.time = document.getElementById("time") as HTMLElement
@@ -35,48 +38,23 @@ export default class Synapse {
             let result: ApiResponse
             let start = Date.now()
             try {
-                this.resetHeaders()
                 this.resetResponse()
+                this.resetHeaders()
+                this.resetCode()
                 this.resetStatus()
                 this.resetSize()
                 this.resetTime()
 
-                const mainForm = event.target as HTMLFormElement
-                const inputs = mainForm.elements as HTMLFormControlsCollection
-
-                const url = (inputs.namedItem("url") as HTMLInputElement).value
-                const method = (inputs.namedItem("method") as HTMLInputElement).value
-
-                if (url === "")
-                    throw new CustomError("Please enter a valid url.", 422)
-
-                const query = this.setQuery()
-
-                let headers: HeadersType = this.setHeaders()
-
-                const auth = this.setAuth()
-                if (auth !== "") {
-                    headers["Authorization"] = auth
-                }
-
-                const data = this.setBodyData()
-
-                const body = JSON.stringify({
-                    method: method,
-                    url: `${url}${query}`,
-                    headers,
-                    data: ["GET", "HEAD"].includes(method) ? null : data
-                })
-
-                console.log(body);
+                this.body = this.setBody()
 
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body
+                    body: this.body
                 })
+
                 result = await response.json()
                 result.time = Date.now() - start
                 this.displayResult(result)
@@ -88,6 +66,36 @@ export default class Synapse {
                 this.loader.hide()
             }
         })
+    }
+
+    private setBody(): string {
+        const inputs = this.mainForm.elements as HTMLFormControlsCollection
+
+        const url = (inputs.namedItem("url") as HTMLInputElement).value
+        const method = (inputs.namedItem("method") as HTMLInputElement).value
+
+        if (url === "")
+            throw new CustomError("Please enter a valid url.", 422)
+
+        const query = this.setQuery()
+
+        let headers: HeadersType = this.setHeaders()
+
+        const auth = this.setAuth()
+        if (auth !== "") {
+            headers["Authorization"] = auth
+        }
+
+        const data = this.setBodyData()
+
+        const body = JSON.stringify({
+            method: method,
+            url: `${url}${query}`,
+            headers,
+            data: ["GET", "HEAD"].includes(method) ? null : data
+        })
+
+        return body
     }
 
     private setQuery(): string {
@@ -113,7 +121,7 @@ export default class Synapse {
             if (header !== "" && value !== "")
                 headers[header] = value
         })
-        const { bodyType } = this.getBodyType()
+        const { bodyType } = this.getBodyTypeAndParameters()
         switch (bodyType) {
             case "formEncoded":
                 headers["Content-Type"] = "application/x-www-form-urlencoded"
@@ -133,7 +141,7 @@ export default class Synapse {
     }
 
     private setBodyData(): string | FormData {
-        const { bodyType, parameters } = this.getBodyType()
+        const { bodyType, parameters } = this.getBodyTypeAndParameters()
         let data: string | FormData = ""
         switch (bodyType) {
             case "json":
@@ -160,7 +168,7 @@ export default class Synapse {
         return data
     }
 
-    private getBodyType(): {
+    private getBodyTypeAndParameters(): {
         bodyType: string,
         parameters: NodeListOf<HTMLElement>
     } {
@@ -175,13 +183,16 @@ export default class Synapse {
         }
     }
 
-
     private resetResponse() {
         this.response.innerText = ""
     }
 
     private resetHeaders() {
         this.headers.innerText = ""
+    }
+
+    private resetCode() {
+        this.code.innerText = ""
     }
 
     private resetStatus() {
@@ -215,6 +226,8 @@ export default class Synapse {
         const headersHtml = this.jsonParser.parse(
             JSON.stringify(result.headers)
         )
+
+        this.code.innerHTML = this.jsonParser.parse(this.body)
 
         this.headers.innerHTML = headersHtml
 
