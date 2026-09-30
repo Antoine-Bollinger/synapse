@@ -70,3 +70,15 @@ export const isJsonString = (text: string): boolean => {
     }
     return true;
 }
+
+export const contentType = (value: string) => {
+    switch (value) {
+        case "formEncoded":
+            return "application/x-www-form-urlencoded"
+        case "form":
+            return "multipart/form-data"
+        default:
+            return ""
+
+    }
+}

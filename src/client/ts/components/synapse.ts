@@ -2,7 +2,7 @@ import { ApiResponse } from "../../types/apiResponse"
 import { HeadersType } from "../../types/headers"
 import { API_URL } from "./config"
 import CustomError from "./error"
-import { isJsonString } from "./helpers"
+import { contentType, isJsonString } from "./helpers"
 import JSONParser from "./jsonparser"
 import Loader from "./loader"
 
@@ -29,9 +29,23 @@ export default class Synapse {
         this.time = document.getElementById("time") as HTMLElement
         this.loader = new Loader()
         this.formSubmitHandler()
+        this.documentHandler()
     }
 
-    private formSubmitHandler() {
+    private documentHandler(): void {
+        const handleInteraction = (event: Event): void => {
+            this.body = this.setBody()
+            this.resetCode()
+            this.code.innerHTML = this.jsonParser.parse(this.body)
+        }
+        document.addEventListener("change", handleInteraction)
+        document.addEventListener("focusin", handleInteraction)
+        document.addEventListener("focusout", handleInteraction)
+        document.addEventListener("keyup", handleInteraction)
+        document.addEventListener("click", handleInteraction)
+    }
+
+    private formSubmitHandler(): void {
         this.mainForm.addEventListener("submit", async (event) => {
             event.preventDefault()
             this.loader.show()
@@ -122,10 +136,10 @@ export default class Synapse {
                 headers[header] = value
         })
         const { bodyType } = this.getBodyTypeAndParameters()
-        switch (bodyType) {
-            case "formEncoded":
-                headers["Content-Type"] = "application/x-www-form-urlencoded"
-        }
+        const contentTypeValue = contentType(bodyType)
+        if (contentTypeValue !== "")
+            headers["Content-Type"] = contentTypeValue
+
         return headers
     }
 
@@ -183,41 +197,41 @@ export default class Synapse {
         }
     }
 
-    private resetResponse() {
+    private resetResponse(): void {
         this.response.innerText = ""
     }
 
-    private resetHeaders() {
+    private resetHeaders(): void {
         this.headers.innerText = ""
     }
 
-    private resetCode() {
+    private resetCode(): void {
         this.code.innerText = ""
     }
 
-    private resetStatus() {
+    private resetStatus(): void {
         this.status.innerText = ""
     }
 
-    private setStatus(code: string) {
+    private setStatus(code: string): void {
         this.status.innerText = code
         this.status.style.color = code.startsWith("2") ? "green" : "red"
     }
 
-    private resetSize() {
+    private resetSize(): void {
         this.size.innerText = ""
     }
 
-    private setSize(size: string) {
+    private setSize(size: string): void {
         this.size.innerText = size
         this.size.style.color = size.startsWith("0") ? "red" : "green"
     }
 
-    private resetTime() {
+    private resetTime(): void {
         this.time.innerText = ""
     }
 
-    private setTime(time: string) {
+    private setTime(time: string): void {
         this.time.innerText = time
         this.time.style.color = time.startsWith("0") ? "red" : "green"
     }
