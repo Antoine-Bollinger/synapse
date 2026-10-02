@@ -4,7 +4,6 @@ import { getAccessToken } from "./components/zohoTokenManager"
 const app = express()
 
 app.use(express.json())
-app.use(express.static("public"))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -22,21 +21,59 @@ app.get("/zoho", async (req, res) => {
 })
 
 app.post("/proxy", async (req, res) => {
-    const { url, method, headers, data } = req.body
+    const { url, method = "GET", headers, data } = req.body ?? {}
 
-    const response = await fetch(url, {
-        method,
-        headers,
-        body: data
-    })
+    if (!url || typeof url !== "string") {
+        return res.status(400).json({
+            error: "Missing or invalid 'url'"
+        })
+    }
 
-    const text = await response.text()
+    const allowedMethods = process.env.ALLOW_METHODS?.split(",") ?? ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-    res.json({
-        status: response.status,
-        headers: Object.fromEntries(response.headers.entries()),
-        body: text
-    })
+    if (!allowedMethods.includes(method.toUpperCase())) {
+        return res.status(400).json({
+            error: `Unsupported HTTP method: ${method}`
+        })
+    }
+
+    try {
+        const normalizedMethod = method.toUpperCase()
+
+        const response = await fetch(url, {
+            method: normalizedMethod,
+            headers,
+            body: ["GET", "HEAD"].includes(normalizedMethod)
+                ? undefined
+                : data,
+            signal: AbortSignal.timeout(30_000)
+        })
+
+        const text = await response.text()
+
+        return res.json({
+            status: response.status,
+            ok: response.ok,
+            headers: Object.fromEntries(response.headers.entries()),
+            body: text
+        })
+
+    } catch (error) {
+        console.error("Proxy request failed:", error)
+
+        if (error instanceof Error && error.name === "TimeoutError") {
+            return res.status(504).json({
+                error: "The remote server did not respond in time"
+            })
+        }
+
+        return res.status(502).json({
+            error: "Failed to contact remote server",
+            message: error instanceof Error
+                ? error.message
+                : "Unknown error"
+        })
+    }
 })
 
 const port = process.env.PORT || 3000

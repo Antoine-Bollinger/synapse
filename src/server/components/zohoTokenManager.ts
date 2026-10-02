@@ -1,15 +1,13 @@
-import SQLite from "./database"
 import { StoredToken } from "../types/token"
-
-const db = new SQLite()
+import { getToken, saveToken } from "./mongodbTokenStorage"
 
 export const getAccessToken = async (): Promise<string> => {
-    let token = await db.getToken()
+    let token = await getToken()
 
     if (!token || isExpired(token)) {
         token = await refreshToken()
 
-        await db.insertToken(token)
+        await saveToken(token)
     }
 
     return token.accessToken
@@ -26,6 +24,7 @@ const refreshToken = async (): Promise<StoredToken> => {
 
     const response = await request.json()
     return {
+        key: response.key,
         accessToken: response.access_token,
         expiresAt: String(Date.now() + Number(response.expires_in) * 1000)
     }
