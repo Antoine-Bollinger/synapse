@@ -1,10 +1,8 @@
 {
     "compilerOptions": {
         "target": "ES2022",
-        "module": "NodeNext",
-        "moduleResolution": "NodeNext",
-        "outDir": "./api",
-        "rootDir": "./src/server",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
         "strict": true,
         "sourceMap": true,
         "esModuleInterop": true,
