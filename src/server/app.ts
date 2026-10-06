@@ -13,7 +13,9 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get("/zoho", requireToken, async (req, res) => {
+app.use(requireToken)
+
+app.get("/zoho", async (req, res) => {
     const token = await getAccessToken()
 
     res.json({
