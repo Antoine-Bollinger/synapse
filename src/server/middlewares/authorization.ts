@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express"
 
 export const requireToken = (req: Request, res: Response, next: NextFunction) => {
+    if (req.method === "OPTIONS") {
+        return next();
+    }
+
     const authorization = req.get("Authorization")
 
     if (!authorization) {
