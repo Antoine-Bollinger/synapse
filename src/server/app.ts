@@ -1,5 +1,6 @@
 import express from "express"
 import { getAccessToken } from "./components/zohoTokenManager"
+import { requireToken } from "./middlewares/authorization"
 
 const app = express()
 
@@ -12,11 +13,11 @@ app.use((req, res, next) => {
     next()
 })
 
-app.get("/zoho", async (req, res) => {
+app.get("/zoho", requireToken, async (req, res) => {
     const token = await getAccessToken()
 
     res.json({
-        body: token
+        token
     })
 })
 
