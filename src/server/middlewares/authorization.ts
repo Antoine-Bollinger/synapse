@@ -9,6 +9,7 @@ export const requireToken = (req: Request, res: Response, next: NextFunction) =>
 
     if (!authorization) {
         return res.status(401).json({
+            status: 401,
             error: "Missing authorization token"
         })
     }
@@ -17,12 +18,14 @@ export const requireToken = (req: Request, res: Response, next: NextFunction) =>
 
     if (type !== "Bearer" || !token) {
         return res.status(401).json({
+            status: 401,
             error: "Invalid authorization format"
         })
     }
 
     if (token !== process.env.API_TOKEN) {
         return res.status(403).json({
+            status: 403,
             error: "Invalid token"
         })
     }

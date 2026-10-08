@@ -3,4 +3,6 @@ export interface ApiResponse {
     headers: Record<string, string>
     body: string
     time?: number
+    ok?: string
+    error?: string
 }

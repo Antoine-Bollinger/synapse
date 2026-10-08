@@ -62,19 +62,21 @@ app.post("/proxy", async (req, res) => {
         })
 
     } catch (error) {
-        console.error("Proxy request failed:", error)
-
         if (error instanceof Error && error.name === "TimeoutError") {
             return res.status(504).json({
+                status: 504,
                 error: "The remote server did not respond in time"
             })
         }
 
         return res.status(502).json({
-            error: "Failed to contact remote server",
-            message: error instanceof Error
-                ? error.message
-                : "Unknown error"
+            status: 502,
+            error: `${error instanceof Error
+                ? error.name
+                : "Failed to contact remote server."
+                } ${error instanceof Error
+                    ? error.message
+                    : "Unknown reason"}`
         })
     }
 })

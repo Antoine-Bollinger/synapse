@@ -1,6 +1,6 @@
 import { ApiResponse } from "../../types/apiResponse"
 import { HeadersType } from "../../types/headers"
-import { API_URL } from "./config"
+import { API_TOKEN, API_URL } from "./config"
 import CustomError from "./error"
 import { contentType, isJsonString } from "./helpers"
 import JSONParser from "./jsonparser"
@@ -64,12 +64,17 @@ export default class Synapse {
                 const response = await fetch(API_URL, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${API_TOKEN}`
                     },
                     body: this.body
                 })
 
                 result = await response.json()
+
+                if (!result.ok)
+                    throw new CustomError(result.error ?? "Unknow error.", result.status)
+
                 result.time = Date.now() - start
                 this.displayResult(result)
             } catch (error) {
