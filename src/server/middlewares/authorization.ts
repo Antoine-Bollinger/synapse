@@ -1,33 +1,54 @@
-import { Request, Response, NextFunction } from "express"
+import {
+    Request,
+    Response,
+    NextFunction
+} from "express"
 
-export const requireToken = (req: Request, res: Response, next: NextFunction) => {
+import { ApiError } from "../../shared/apiResponse"
+
+export function requireToken(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
     if (req.method === "OPTIONS") {
-        return next();
+        return next()
     }
 
-    const authorization = req.get("Authorization")
+    const authorization =
+        req.get("Authorization")
 
     if (!authorization) {
-        return res.status(401).json({
-            status: 401,
-            error: "Missing authorization token"
-        })
+        return next(
+            new ApiError(
+                401,
+                "AUTH_MISSING_TOKEN",
+                "Missing authorization token"
+            )
+        )
     }
 
-    const [type, token] = authorization.split(" ")
+    const [type, token] =
+        authorization.split(" ")
 
     if (type !== "Bearer" || !token) {
-        return res.status(401).json({
-            status: 401,
-            error: "Invalid authorization format"
-        })
+        return next(
+            new ApiError(
+                401,
+                "AUTH_INVALID_FORMAT",
+                "Invalid authorization format"
+            )
+        )
     }
 
     if (token !== process.env.API_TOKEN) {
-        return res.status(403).json({
-            status: 403,
-            error: "Invalid token"
-        })
+        return next(
+            new ApiError(
+                403,
+                "AUTH_INVALID_TOKEN",
+                "Invalid token"
+            )
+        )
     }
 
     next()

@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build-client": "webpack --config webpack.config.js --mode production",
-    "watch-client": "webpack --config webpack.config.js --watch --mode development",
-    "build-server": "webpack --config webpack.server.config.js --mode production",
-    "watch-server": "webpack --config webpack.server.config.js --watch --mode development",
-    "build": "npm run build-client && npm run build-server",
+    "watch-client": "webpack --config webpack.config.js --watch --mode production",
+    "watch-server": "webpack --config webpack.server.config.js --watch --mode production",
+    "watch": "npm run watch-client && npm run watch-server",
     "server": "nodemon --env-file=api/.env api/app.js"
   },
   "keywords": [],

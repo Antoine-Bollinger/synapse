@@ -1,7 +1,9 @@
+import ApiClient from "../../types/apiClient"
 import { ApiResponse } from "../../types/apiResponse"
 import { HeadersType } from "../../types/headers"
+import { ProxyResponse } from "../../types/proxyResponse"
 import { API_TOKEN, API_URL } from "./config"
-import CustomError from "./error"
+import CustomError from "../../types/customError"
 import { contentType, isJsonString } from "./helpers"
 import JSONParser from "./jsonparser"
 import Loader from "./loader"
@@ -48,37 +50,24 @@ export default class Synapse {
     private formSubmitHandler(): void {
         this.mainForm.addEventListener("submit", async (event) => {
             event.preventDefault()
+            const start = Date.now()
             this.loader.show()
-            let result: ApiResponse
-            let start = Date.now()
             try {
-                this.resetResponse()
-                this.resetHeaders()
-                this.resetCode()
-                this.resetStatus()
-                this.resetSize()
-                this.resetTime()
+                this.resetAll()
 
-                this.body = this.setBody()
+                const result = await ApiClient.post<ProxyResponse>(
+                    API_URL,
+                    this.setBody()
+                )
 
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${API_TOKEN}`
-                    },
-                    body: this.body
-                })
+                result.time = Date.now() - start
 
-                result = await response.json()
 
-                if (!result.ok)
-                    throw new CustomError(result.error ?? "Unknow error.", result.status)
 
                 result.time = Date.now() - start
                 this.displayResult(result)
             } catch (error) {
-                result = this.errorToResult(error)
+                const result = this.errorToResult(error)
                 result.time = Date.now() - start
                 this.displayResult(result)
             } finally {
@@ -218,7 +207,9 @@ export default class Synapse {
         this.status.innerText = ""
     }
 
-    private setStatus(code: string): void {
+    private setStatus(
+        code: string
+    ): void {
         this.status.innerText = code
         this.status.style.color = code.startsWith("2") ? "green" : "red"
     }
@@ -227,7 +218,9 @@ export default class Synapse {
         this.size.innerText = ""
     }
 
-    private setSize(size: string): void {
+    private setSize(
+        size: string
+    ): void {
         this.size.innerText = size
         this.size.style.color = size.startsWith("0") ? "red" : "green"
     }
@@ -236,64 +229,115 @@ export default class Synapse {
         this.time.innerText = ""
     }
 
-    private setTime(time: string): void {
+    private setTime(
+        time: string
+    ): void {
         this.time.innerText = time
         this.time.style.color = time.startsWith("0") ? "red" : "green"
     }
 
-    private displayResult(result: ApiResponse): void {
+    private resetAll(): void {
+        this.resetResponse()
+        this.resetHeaders()
+        this.resetCode()
+        this.resetStatus()
+        this.resetSize()
+        this.resetTime()
+    }
+
+    private displayResult(
+        result: ProxyResponse
+    ): void {
         const headersHtml = this.jsonParser.parse(
-            JSON.stringify(result.headers)
+            JSON.stringify(result.headers, null, 2)
         )
 
-        this.code.innerHTML = this.jsonParser.parse(this.body)
+        this.code.innerHTML = this.jsonParser.parse(
+            this.body
+        )
 
         this.headers.innerHTML = headersHtml
 
-        this.setStatus(result.status.toString())
-        this.setSize(this.getResponseSize(result))
-        this.setTime(`${result.time} ms`)
+        this.setStatus(
+            result.remoteStatus.toString()
+        )
 
-        const responseHtml = this.jsonParser.parse(result.body)
+        this.setSize(
+            this.getResponseSize(result)
+        )
 
-        if (isJsonString(result.body))
-            this.response.innerHTML = responseHtml
-        else if (result.body.toLowerCase().trim().startsWith("<!doctype html>"))
-            this.response.appendChild(this.displayIframe(result.body))
-        else
-            this.response.innerText = result.body
+        this.setTime(
+            `${result.time ?? 0} ms`
+        )
+
+        const trimmedBody =
+            result.body.trim()
+
+        if (isJsonString(trimmedBody)) {
+
+            this.response.innerHTML =
+                this.jsonParser.parse(trimmedBody)
+
+        } else if (
+            trimmedBody
+                .toLowerCase()
+                .startsWith("<!doctype html>")
+        ) {
+            this.response.appendChild(
+                this.displayIframe(
+                    result.body
+                )
+            )
+
+        } else {
+            this.response.innerText =
+                result.body
+        }
 
         this.jsonParser.eventListener()
     }
 
-    private displayIframe(html: string): HTMLElement {
+    private displayIframe(
+        html: string
+    ): HTMLElement {
         const iframe = document.createElement("iframe")
         iframe.srcdoc = html
         return iframe
     }
 
-    private errorToResult(error: unknown): ApiResponse {
+    private errorToResult(
+        error: unknown
+    ): ProxyResponse {
+        if (error instanceof CustomError) {
+            const customError = error as CustomError
+            return {
+                remoteStatus: customError.status ?? 500,
+                remoteOk: false,
+                headers: {},
+                body: `[${customError.code ?? "UNKNOWN"}] ${customError.message}`
+            }
+        }
+
+        if (error instanceof Error) {
+            return {
+                remoteStatus: 500,
+                remoteOk: false,
+                headers: {},
+                body: error.message
+            }
+        }
+
         return {
-            status: error instanceof CustomError ? error.code : 0,
+            remoteStatus: 500,
+            remoteOk: false,
             headers: {},
-            body: JSON.stringify({
-                success: false,
-                error: {
-                    name: error instanceof Error
-                        ? error.name
-                        : "UnknownError",
-                    message: error instanceof Error
-                        ? error.message
-                        : String(error),
-                    stack: error instanceof Error
-                        ? error.stack
-                        : undefined
-                }
-            }, null, 4)
+            body: "Unknown error"
         }
     }
 
-    private getResponseSize(result: ApiResponse): string {
+    private getResponseSize(
+        result: ProxyResponse
+    ): string {
         return `${new Blob([result.body]).size ?? 0} bytes`
     }
 }
