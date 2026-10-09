@@ -51,27 +51,17 @@ export default class Synapse {
             event.preventDefault()
             const start = Date.now()
             this.loader.show()
+            this.resetAll()
+            let result: ProxyResponse
             try {
-                this.resetAll()
-
-                const result = await ApiClient.post<ProxyResponse>(
-                    API_URL,
-                    this.setBody()
-                )
-
-                result.time = Date.now() - start
-
-
-
-                result.time = Date.now() - start
-                this.displayResult(result)
+                result = await ApiClient.post<ProxyResponse>(this.setBody())
             } catch (error) {
-                const result = this.errorToResult(error)
-                result.time = Date.now() - start
-                this.displayResult(result)
+                result = this.errorToResult(error)
             } finally {
                 this.loader.hide()
             }
+            result.time = Date.now() - start
+            this.displayResult(result)
         })
     }
 
