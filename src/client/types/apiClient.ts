@@ -1,8 +1,5 @@
 import CustomError from "./customError"
-
-import type {
-    ApiResponse
-} from "../../shared/apiResponse"
+import type { ApiResponse } from "../../shared/apiResponse"
 import { API_TOKEN } from "../ts/components/config"
 
 export default class ApiClient {
