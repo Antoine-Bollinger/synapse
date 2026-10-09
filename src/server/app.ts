@@ -28,6 +28,7 @@ app.post("/proxy", async (req, res) => {
 
     if (!url || typeof url !== "string") {
         return res.status(400).json({
+            status: 400,
             error: "Missing or invalid 'url'"
         })
     }
@@ -36,6 +37,7 @@ app.post("/proxy", async (req, res) => {
 
     if (!allowedMethods.includes(method.toUpperCase())) {
         return res.status(400).json({
+            status: 400,
             error: `Unsupported HTTP method: ${method}`
         })
     }
